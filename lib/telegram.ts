@@ -55,36 +55,39 @@ export const isTelegramWebApp = (): boolean => {
  * Хук для работы с Telegram WebApp
  */
 export const useTelegramWebApp = () => {
-  const [webApp] = useState<TelegramWebApp | null>(getTelegramWebApp());
-  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [webApp] = useState<TelegramWebApp | null>(() => getTelegramWebApp());
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>(() => {
+    const app = getTelegramWebApp();
+    return app?.colorScheme || 'light';
+  });
+  const [isExpanded, setIsExpanded] = useState(() => {
+    const app = getTelegramWebApp();
+    return app?.isExpanded || false;
+  });
 
   useEffect(() => {
-    if (webApp) {
+    if (!webApp) return;
+
+    // Подписываемся на изменения темы
+    const handleThemeChange = () => {
       setColorScheme(webApp.colorScheme);
+    };
+
+    const handleViewportChange = () => {
       setIsExpanded(webApp.isExpanded);
+    };
 
-      // Подписываемся на изменения темы
-      const handleThemeChange = () => {
-        setColorScheme(webApp.colorScheme);
-      };
+    // Telegram WebApp не имеет встроенных событий, но мы можем проверять изменения
+    const interval = setInterval(() => {
+      if (webApp.colorScheme !== colorScheme) {
+        handleThemeChange();
+      }
+      if (webApp.isExpanded !== isExpanded) {
+        handleViewportChange();
+      }
+    }, 1000);
 
-      const handleViewportChange = () => {
-        setIsExpanded(webApp.isExpanded);
-      };
-
-      // Telegram WebApp не имеет встроенных событий, но мы можем проверять изменения
-      const interval = setInterval(() => {
-        if (webApp.colorScheme !== colorScheme) {
-          handleThemeChange();
-        }
-        if (webApp.isExpanded !== isExpanded) {
-          handleViewportChange();
-        }
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
+    return () => clearInterval(interval);
   }, [webApp, colorScheme, isExpanded]);
 
   return {

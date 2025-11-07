@@ -1,5 +1,6 @@
 import { MapPin, UtensilsCrossed, ShoppingBag, Info } from 'lucide-react';
 import { Page } from '../App';
+import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 
 interface HomePageProps {
   onNavigate: (page: Page) => void;
@@ -69,17 +70,19 @@ interface NavigationButtonProps {
 
 function NavigationButton({ icon, title, description, onClick }: NavigationButtonProps) {
   return (
-    <button
+    <Card 
+      className="cursor-pointer hover:border-[#0088cc] transition-all duration-200 hover:shadow-md"
       onClick={onClick}
-      className="flex items-center gap-4 p-4 bg-white rounded-lg border border-[#e9e9e9] hover:border-[#0088cc] transition-all duration-200 shadow-sm hover:shadow-md"
     >
-      <div className="flex items-center justify-center w-16 h-16 bg-[#0088cc]/10 rounded-lg text-[#0088cc]">
-        {icon}
-      </div>
-      <div className="flex-1 text-left">
-        <h3 className="text-[16px] font-semibold text-[#000000] mb-1">{title}</h3>
-        <p className="text-[14px] text-[#666666]">{description}</p>
-      </div>
-    </button>
+      <CardHeader className="flex-row gap-4 items-center space-y-0 p-4">
+        <div className="flex items-center justify-center w-16 h-16 bg-[#0088cc]/10 rounded-lg text-[#0088cc] shrink-0">
+          {icon}
+        </div>
+        <div className="flex-1">
+          <CardTitle className="text-[16px] mb-1">{title}</CardTitle>
+          <CardDescription className="text-[14px]">{description}</CardDescription>
+        </div>
+      </CardHeader>
+    </Card>
   );
 }

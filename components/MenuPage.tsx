@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Header } from './Header';
 import { Plus, Minus, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
+import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
+import { Button } from './ui/button';
 
 interface MenuPageProps {
   onBack: () => void;
@@ -93,33 +95,17 @@ export function MenuPage({ onBack }: MenuPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white pb-32 overflow-y-auto">
+    <div className="min-h-screen bg-background text-foreground pb-32 overflow-y-auto">
       <Header title="Меню" onBack={onBack} />
       
       <div className="px-4 py-6">
         {/* Meal Type Switcher */}
-        <div className="flex gap-2 mb-6 p-1 bg-[#f5f5f5] rounded-lg">
-          <button
-            onClick={() => setMealType('breakfast')}
-            className={`flex-1 py-3 rounded-md transition-all ${
-              mealType === 'breakfast'
-                ? 'bg-white text-[#0088cc] font-semibold shadow-sm'
-                : 'text-[#666666]'
-            }`}
-          >
-            Завтрак
-          </button>
-          <button
-            onClick={() => setMealType('dinner')}
-            className={`flex-1 py-3 rounded-md transition-all ${
-              mealType === 'dinner'
-                ? 'bg-white text-[#0088cc] font-semibold shadow-sm'
-                : 'text-[#666666]'
-            }`}
-          >
-            Ужин
-          </button>
-        </div>
+        <Tabs value={mealType} onValueChange={(value) => setMealType(value as 'breakfast' | 'dinner')} className="mb-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="breakfast">Завтрак</TabsTrigger>
+            <TabsTrigger value="dinner">Ужин</TabsTrigger>
+          </TabsList>
+        </Tabs>
 
         {/* Date Selection */}
         <div className="mb-6">
@@ -128,26 +114,20 @@ export function MenuPage({ onBack }: MenuPageProps) {
             Выберите дату
           </label>
           <div className="flex gap-2">
-            <button
+            <Button
+              variant={orderDate === 'tomorrow' ? 'default' : 'outline'}
               onClick={() => setOrderDate('tomorrow')}
-              className={`flex-1 py-3 px-4 rounded-lg border transition-all ${
-                orderDate === 'tomorrow'
-                  ? 'border-[#0088cc] bg-[#0088cc]/10 text-[#0088cc] font-semibold'
-                  : 'border-[#e9e9e9] text-[#666666]'
-              }`}
+              className="flex-1"
             >
               Завтра
-            </button>
-            <button
+            </Button>
+            <Button
+              variant={orderDate === 'dayAfter' ? 'default' : 'outline'}
               onClick={() => setOrderDate('dayAfter')}
-              className={`flex-1 py-3 px-4 rounded-lg border transition-all ${
-                orderDate === 'dayAfter'
-                  ? 'border-[#0088cc] bg-[#0088cc]/10 text-[#0088cc] font-semibold'
-                  : 'border-[#e9e9e9] text-[#666666]'
-              }`}
+              className="flex-1"
             >
               Послезавтра
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -209,12 +189,13 @@ export function MenuPage({ onBack }: MenuPageProps) {
                 {cart.reduce((sum, item) => sum + item.quantity, 0)} позиций
               </p>
             </div>
-            <button
+            <Button
               onClick={handleSubmitOrder}
-              className="w-full py-4 bg-[#0088cc] text-white rounded-lg font-semibold hover:bg-[#0077b3] transition-all"
+              className="w-full"
+              size="lg"
             >
               Подтвердить заказ
-            </button>
+            </Button>
           </div>
         </div>
       )}
