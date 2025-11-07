@@ -23,7 +23,7 @@ export function AboutPage({ onBack }: AboutPageProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-y-auto">
       <Header title="О нас" onBack={onBack} />
       
       <div className="px-4 py-6">

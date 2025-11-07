@@ -38,8 +38,8 @@ export interface TelegramWebApp {
  * Получить экземпляр Telegram WebApp
  */
 export const getTelegramWebApp = (): TelegramWebApp | null => {
-  if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-    return window.Telegram.WebApp;
+  if (typeof window !== 'undefined' && (window as any).Telegram?.WebApp) {
+    return (window as any).Telegram.WebApp;
   }
   return null;
 };

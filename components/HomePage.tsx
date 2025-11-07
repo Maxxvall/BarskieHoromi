@@ -7,7 +7,7 @@ interface HomePageProps {
 
 export function HomePage({ onNavigate }: HomePageProps) {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
       {/* Header */}
       <div className="bg-[#0088cc] text-white px-6 py-8">
         <h1 className="text-[20px] font-semibold mb-2">Гостевой дом</h1>
@@ -15,7 +15,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
       </div>
 
       {/* Main Navigation */}
-      <div className="flex-1 px-4 py-6">
+      <div className="flex-1 px-4 py-6 bg-white">
         <div className="grid gap-4">
           <NavigationButton
             icon={<MapPin size={32} />}

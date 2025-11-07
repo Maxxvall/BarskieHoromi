@@ -49,7 +49,7 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-y-auto">
       <Header title="Магазин" onBack={onBack} />
       
       <div className="px-4 py-6">

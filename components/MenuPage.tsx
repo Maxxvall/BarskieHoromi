@@ -93,7 +93,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white pb-32">
+    <div className="min-h-screen bg-white pb-32 overflow-y-auto">
       <Header title="Меню" onBack={onBack} />
       
       <div className="px-4 py-6">

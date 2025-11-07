@@ -65,7 +65,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
 
   if (!isUnlocked) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white overflow-y-auto">
         <Header title="Алкоголь" onBack={onBack} />
         
         <div className="px-4 py-8">
@@ -125,7 +125,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-y-auto">
       <Header title="Алкоголь" onBack={onBack} />
       
       <div className="px-4 py-6">

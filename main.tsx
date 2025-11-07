@@ -4,8 +4,8 @@ import App from './App';
 import './styles/globals.css';
 
 // Инициализация Telegram Web App
-if (window.Telegram?.WebApp) {
-  const tg = window.Telegram.WebApp;
+if ((window as any).Telegram?.WebApp) {
+  const tg = (window as any).Telegram.WebApp;
   
   // Разворачиваем приложение на весь экран
   tg.expand();
