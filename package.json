@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && npm run copy-photos",
+    "build": "tsc && vite build && npm run set-sw-version && npm run copy-photos",
+    "set-sw-version": "node scripts/set-sw-version.js",
     "copy-photos": "node -e \"require('fs').cpSync('photo', 'dist/photo', {recursive: true})\"",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives"
@@ -51,4 +52,5 @@
     "typescript-eslint": "^8.46.3",
     "vite": "^5.0.0"
   }
+
 }
