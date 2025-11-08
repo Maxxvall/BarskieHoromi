@@ -53,6 +53,29 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
       <Header title="Магазин" onBack={onBack} />
       
       <div className="px-4 py-6">
+        {/* Alcohol Promo Section (moved above souvenirs) */}
+        <div className="mb-8">
+          <div className="bg-gradient-to-r from-[#0088cc]/10 to-[#52a547]/10 rounded-lg p-6 border border-[#0088cc]/20">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-12 h-12 bg-[#0088cc]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <Lock size={24} className="text-[#0088cc]" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-[16px] font-semibold mb-2 text-[#000000]">
+                  Секретный раздел
+                </h3>
+                {/* Description removed as requested */}
+              </div>
+            </div>
+            <button
+              onClick={() => onNavigate('alcohol')}
+              className="w-full py-3 bg-[#0088cc] text-white rounded-lg font-semibold hover:bg-[#0077b3] transition-all"
+            >
+              Показать
+            </button>
+          </div>
+        </div>
+
         {/* Souvenirs Section */}
         <div className="mb-8">
           <h2 className="text-[17px] font-semibold mb-4 text-[#000000]">
@@ -82,29 +105,6 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Alcohol Promo Section */}
-        <div className="bg-gradient-to-r from-[#0088cc]/10 to-[#52a547]/10 rounded-lg p-6 border border-[#0088cc]/20">
-          <div className="flex items-start gap-4 mb-4">
-            <div className="w-12 h-12 bg-[#0088cc]/20 rounded-full flex items-center justify-center flex-shrink-0">
-              <Lock size={24} className="text-[#0088cc]" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-[16px] font-semibold mb-2 text-[#000000]">
-                Секретный раздел
-              </h3>
-              <p className="text-[14px] text-[#666666] mb-4">
-                Хотите приобрести алкогольные напитки? Введите промокод из карточки в номере.
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => onNavigate('alcohol')}
-            className="w-full py-3 bg-[#0088cc] text-white rounded-lg font-semibold hover:bg-[#0077b3] transition-all"
-          >
-            Показать алкоголь
-          </button>
         </div>
 
         {/* Info Text */}

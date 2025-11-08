@@ -66,7 +66,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
   if (!isUnlocked) {
     return (
       <div className="min-h-screen bg-white overflow-y-auto">
-        <Header title="Алкоголь" onBack={onBack} />
+        <Header title="Назад" onBack={onBack} />
         
         <div className="px-4 py-8">
           <div className="max-w-md mx-auto">
@@ -112,12 +112,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
               </button>
             </form>
 
-            {/* Hint */}
-            <div className="mt-8 p-4 bg-[#f5f5f5] rounded-lg">
-              <p className="text-[14px] text-[#666666] text-center">
-                Подсказка: промокод состоит из сокращенного названия текущего месяца и года (например, JAN2025)
-              </p>
-            </div>
+            {/* Hint removed as requested */}
           </div>
         </div>
       </div>
@@ -126,7 +121,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
 
   return (
     <div className="min-h-screen bg-white overflow-y-auto">
-      <Header title="Алкоголь" onBack={onBack} />
+      <Header title="Назад" onBack={onBack} />
       
       <div className="px-4 py-6">
         {/* Success Message */}
