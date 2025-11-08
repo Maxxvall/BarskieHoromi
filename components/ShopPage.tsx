@@ -12,39 +12,39 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
   const souvenirs = [
     {
       id: 's1',
-      name: 'Матрёшка расписная',
-      price: 800,
-      image: 'https://images.unsplash.com/photo-1619820358955-31de861d2a87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cmFkaXRpb25hbCUyMHJ1c3NpYW4lMjBzb3V2ZW5pciUyMG1hdHJ5b3Noa2F8ZW58MXx8fHwxNzYyNTQ3MDgyfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      name: 'Магнит с видом гор',
+      price: 150,
+      image: '/photo/Магнитик2.png',
     },
     {
       id: 's2',
       name: 'Деревянная ложка',
       price: 350,
-      image: 'https://images.unsplash.com/photo-1661873482206-4e2fa0ba455d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYW5kbWFkZSUyMHdvb2RlbiUyMGNyYWZ0fGVufDF8fHx8MTc2MjU0NzA4Mnww&ixlib=rb-4.1.0&q=80&w=1080',
+      image: '/photo/Деревяная ложка.png',
     },
     {
       id: 's3',
       name: 'Керамическая кружка',
       price: 450,
-      image: 'https://images.unsplash.com/photo-1648372429968-8d649cab1389?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjZXJhbWljJTIwbXVnJTIwc291dmVuaXJ8ZW58MXx8fHwxNzYyNTQ3MDgzfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      image: '/photo/Кружка.png',
     },
     {
       id: 's4',
-      name: 'Магнит с видом гор',
+      name: 'Магнит с видом',
       price: 150,
-      image: 'https://images.unsplash.com/photo-1605972013598-be8367a96e7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxndWVzdGhvdXNlJTIwZXh0ZXJpb3J8ZW58MXx8fHwxNzYyNTQ3MDg0fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      image: '/photo/магнитик.png',
     },
     {
       id: 's5',
-      name: 'Открытки набор (5 шт)',
-      price: 200,
-      image: 'https://images.unsplash.com/photo-1737737210863-387afd35344e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwaW50ZXJpb3IlMjByb29tfGVufDF8fHx8MTc2MjU0NzA4NHww&ixlib=rb-4.1.0&q=80&w=1080',
+      name: 'Часы настенные',
+      price: 1200,
+      image: '/photo/Часы.png',
     },
     {
       id: 's6',
       name: 'Текстильный платок',
       price: 600,
-      image: 'https://images.unsplash.com/photo-1619820358955-31de861d2a87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cmFkaXRpb25hbCUyMHJ1c3NpYW4lMjBzb3V2ZW5pciUyMG1hdHJ5b3Noa2F8ZW58MXx8fHwxNzYyNTQ3MDgyfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      image: '/photo/Текстильный платок.png',
     },
   ];
 

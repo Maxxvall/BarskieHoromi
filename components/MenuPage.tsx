@@ -4,6 +4,7 @@ import { Plus, Minus, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { Button } from './ui/button';
+import { sendOrderToTelegram, getTelegramUserData, formatUserName } from '../lib/telegram-api';
 
 interface MenuPageProps {
   onBack: () => void;
@@ -76,7 +77,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const handleSubmitOrder = () => {
+  const handleSubmitOrder = async () => {
     if (cart.length === 0) {
       toast.error('Выберите хотя бы одно блюдо');
       return;
@@ -85,13 +86,44 @@ export function MenuPage({ onBack }: MenuPageProps) {
     const dateText = orderDate === 'tomorrow' ? 'завтра' : 'послезавтра';
     const mealText = mealType === 'breakfast' ? 'Завтрак' : 'Ужин';
     
-    // Simulate sending order to admin
-    toast.success(`Заказ на ${dateText} отправлен администратору!`, {
-      description: `${mealText} на сумму ${totalPrice} ₽`,
-    });
+    // Показываем индикатор загрузки
+    const loadingToast = toast.loading('Отправляем заказ...');
     
-    // Clear cart
-    setCart([]);
+    try {
+      // Получаем данные пользователя из Telegram
+      const userData = getTelegramUserData();
+      const userName = formatUserName(userData);
+      
+      // Отправляем заказ в Telegram
+      const success = await sendOrderToTelegram({
+        items: cart,
+        totalPrice,
+        mealType,
+        orderDate,
+        userName,
+        userId: userData?.id,
+      });
+      
+      if (success) {
+        toast.success(`Заказ на ${dateText} отправлен администратору!`, {
+          description: `${mealText} на сумму ${totalPrice} ₽`,
+          id: loadingToast,
+        });
+        
+        // Очищаем корзину
+        setCart([]);
+      } else {
+        toast.error('Не удалось отправить заказ', {
+          description: 'Попробуйте еще раз',
+          id: loadingToast,
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      toast.error('Произошла ошибка при отправке заказа', {
+        id: loadingToast,
+      });
+    }
   };
 
   return (

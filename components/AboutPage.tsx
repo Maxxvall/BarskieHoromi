@@ -115,7 +115,7 @@ export function AboutPage({ onBack }: AboutPageProps) {
         {/* Call to Action */}
         <div className="mt-6">
           <a
-            href="https://t.me/guesthouse"
+            href="https://t.me/firemannn3"
             className="block w-full py-4 bg-[#0088cc] text-white text-center rounded-lg font-semibold hover:bg-[#0077b3] transition-all"
           >
             Написать администратору
