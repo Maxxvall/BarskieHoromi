@@ -70,16 +70,17 @@ interface NavigationButtonProps {
 
 function NavigationButton({ icon, title, description, onClick }: NavigationButtonProps) {
   return (
-    <Card 
+    <Card
       className="cursor-pointer hover:border-[#0088cc] transition-all duration-200 hover:shadow-md"
       onClick={onClick}
     >
-      <CardHeader className="flex-row gap-4 items-center space-y-0 p-4">
+      {/* Используем flex для выравнивания иконки и текстов в одну строку */}
+      <CardHeader className="flex items-center gap-4 p-4">
         <div className="flex items-center justify-center w-16 h-16 bg-[#0088cc]/10 rounded-lg text-[#0088cc] shrink-0">
           {icon}
         </div>
         <div className="flex-1">
-          <CardTitle className="text-[16px] mb-1">{title}</CardTitle>
+          <CardTitle className="text-[16px] font-semibold mb-1">{title}</CardTitle>
           <CardDescription className="text-[14px]">{description}</CardDescription>
         </div>
       </CardHeader>
