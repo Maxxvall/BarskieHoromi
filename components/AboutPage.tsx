@@ -9,15 +9,15 @@ interface AboutPageProps {
 export function AboutPage({ onBack }: AboutPageProps) {
   const photos = [
     {
-      url: 'https://images.unsplash.com/photo-1605972013598-be8367a96e7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxndWVzdGhvdXNlJTIwZXh0ZXJpb3J8ZW58MXx8fHwxNzYyNTQ3MDg0fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      url: '/onas/2.jpg',
       alt: 'Внешний вид гостевого дома',
     },
     {
-      url: 'https://images.unsplash.com/photo-1737737210863-387afd35344e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwaW50ZXJpb3IlMjByb29tfGVufDF8fHx8MTc2MjU0NzA4NHww&ixlib=rb-4.1.0&q=80&w=1080',
+      url: '/onas/i.webp',
       alt: 'Уютный интерьер номера',
     },
     {
-      url: 'https://images.unsplash.com/photo-1606920301459-d66500c43ff6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3aW5lJTIwYm90dGxlcyUyMGNvbGxlY3Rpb258ZW58MXx8fHwxNzYyNTQ3MDg0fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      url: '/onas/orig.jpeg',
       alt: 'Общая зона отдыха',
     },
   ];
