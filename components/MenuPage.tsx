@@ -114,20 +114,22 @@ export function MenuPage({ onBack }: MenuPageProps) {
             Выберите дату
           </label>
           <div className="flex gap-2">
-            <Button
-              variant={orderDate === 'tomorrow' ? 'default' : 'outline'}
+            <button
+              type="button"
+              aria-pressed={orderDate === 'tomorrow'}
               onClick={() => setOrderDate('tomorrow')}
-              className="flex-1"
+              className={`flex-1 rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${orderDate === 'tomorrow' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'}`}
             >
               Завтра
-            </Button>
-            <Button
-              variant={orderDate === 'dayAfter' ? 'default' : 'outline'}
+            </button>
+            <button
+              type="button"
+              aria-pressed={orderDate === 'dayAfter'}
               onClick={() => setOrderDate('dayAfter')}
-              className="flex-1"
+              className={`flex-1 rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${orderDate === 'dayAfter' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'}`}
             >
               Послезавтра
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -191,7 +193,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
             </div>
             <Button
               onClick={handleSubmitOrder}
-              className="w-full"
+              className="w-full bg-[#0088cc] text-white hover:bg-[#0077b3]"
               size="lg"
             >
               Подтвердить заказ
