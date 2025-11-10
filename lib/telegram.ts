@@ -31,6 +31,7 @@ export interface TelegramWebApp {
   showAlert(message: string, callback?: () => void): void;
   showConfirm(message: string, callback?: (confirmed: boolean) => void): void;
   openLink(url: string, options?: { try_instant_view?: boolean }): void;
+  openTelegramLink(url: string): void;
   sendData(data: string): void;
 }
 
@@ -162,9 +163,18 @@ export const useHapticFeedback = () => {
     impactLight: useCallback(() => webApp?.HapticFeedback.impactOccurred('light'), [webApp]),
     impactMedium: useCallback(() => webApp?.HapticFeedback.impactOccurred('medium'), [webApp]),
     impactHeavy: useCallback(() => webApp?.HapticFeedback.impactOccurred('heavy'), [webApp]),
-    notificationSuccess: useCallback(() => webApp?.HapticFeedback.notificationOccurred('success'), [webApp]),
-    notificationError: useCallback(() => webApp?.HapticFeedback.notificationOccurred('error'), [webApp]),
-    notificationWarning: useCallback(() => webApp?.HapticFeedback.notificationOccurred('warning'), [webApp]),
+    notificationSuccess: useCallback(
+      () => webApp?.HapticFeedback.notificationOccurred('success'),
+      [webApp]
+    ),
+    notificationError: useCallback(
+      () => webApp?.HapticFeedback.notificationOccurred('error'),
+      [webApp]
+    ),
+    notificationWarning: useCallback(
+      () => webApp?.HapticFeedback.notificationOccurred('warning'),
+      [webApp]
+    ),
     selectionChanged: useCallback(() => webApp?.HapticFeedback.selectionChanged(), [webApp]),
   };
 };

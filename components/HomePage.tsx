@@ -1,7 +1,8 @@
-import { MapPin, UtensilsCrossed, ShoppingBag, Info, Shield } from 'lucide-react';
+import { MapPin, UtensilsCrossed, ShoppingBag, Info, Shield, Send, Phone } from 'lucide-react';
 import { Page } from '../App';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { getTelegramUserData } from '../lib/telegram-api';
+import { useTelegramWebApp } from '../lib/telegram';
 
 interface HomePageProps {
   onNavigate: (page: Page) => void;
@@ -9,7 +10,8 @@ interface HomePageProps {
 
 export function HomePage({ onNavigate }: HomePageProps) {
   const userData = getTelegramUserData();
-  const isAdmin = userData?.id === 515650034;
+  const { webApp } = useTelegramWebApp();
+  const isAdmin = userData?.id === 515650034 || userData?.id === 5216793564;
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -61,10 +63,15 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <div className="px-6 py-4 bg-[#f5f5f5] border-t border-[#e9e9e9]">
         <p className="text-[14px] text-[#666666] mb-2">Связаться с нами:</p>
         <div className="flex flex-col gap-1">
-          <a href="https://t.me/guesthouse" className="text-[16px] text-[#0088cc]">
-            @guesthouse
+          <a
+            onClick={() => webApp?.openTelegramLink('tg://user?id=5216793564')}
+            className="text-[16px] text-[#0088cc] cursor-pointer flex items-center gap-2"
+          >
+            <Send size={16} />
+            Сергей
           </a>
-          <a href="tel:+79212265444" className="text-[16px] text-[#0088cc]">
+          <a href="tel:+79212265444" className="text-[16px] text-[#0088cc] flex items-center gap-2">
+            <Phone size={16} />
             +7 (921) 226-54-44
           </a>
         </div>
