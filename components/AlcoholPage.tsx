@@ -112,9 +112,6 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
             <h2 className="text-[20px] font-semibold text-center mb-2 text-[#000000]">
               Введите промокод
             </h2>
-            <p className="text-[14px] text-[#666666] text-center mb-8">
-              Промокод находится в карточке при заселении. Он обновляется каждый день.
-            </p>
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
