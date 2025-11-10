@@ -8,6 +8,7 @@ import { AlcoholPage } from './components/AlcoholPage';
 import { AboutPage } from './components/AboutPage';
 import { AdminPage } from './components/AdminPage';
 import { useTelegramWebApp, useBackButton, useHapticFeedback } from './lib/telegram';
+import { useScreenshotProtection } from './lib/screenshot-protection';
 
 export type Page = 'home' | 'attractions' | 'menu' | 'shop' | 'alcohol' | 'about' | 'admin';
 
@@ -15,6 +16,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const { webApp, colorScheme, isTelegram } = useTelegramWebApp();
   const haptic = useHapticFeedback();
+  const { showWarning } = useScreenshotProtection();
 
   // Показываем кнопку "Назад" когда не на главной странице
   const shouldShowBackButton = currentPage !== 'home';
@@ -64,7 +66,7 @@ export default function App() {
   const containerBg = isTelegram ? 'bg-[var(--tg-theme-bg-color)]' : 'bg-white';
 
   return (
-    <div className={`min-h-screen ${bgColor}`}>
+    <div className={`min-h-screen ${bgColor} screenshot-protection`}>
       <div className={`mx-auto max-w-[480px] ${containerBg} min-h-screen`}>
         {currentPage === 'home' && <HomePage onNavigate={navigateTo} />}
         {currentPage === 'attractions' && <AttractionsPage onBack={navigateBack} />}
@@ -75,6 +77,18 @@ export default function App() {
         {currentPage === 'admin' && <AdminPage onBack={navigateBack} />}
       </div>
       <Toaster position="bottom-center" />
+
+      {/* Предупреждение о скриншотах */}
+      {showWarning && (
+        <div className="screenshot-warning visible">
+          <div>
+            <div className="text-2xl mb-2">📸</div>
+            <div className="font-bold mb-2">Внимание!</div>
+            <div>Скриншоты запрещены</div>
+            <div className="text-sm mt-2 opacity-80">Это приложение защищено от копирования</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
