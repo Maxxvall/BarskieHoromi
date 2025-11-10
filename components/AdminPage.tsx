@@ -12,6 +12,8 @@ export function AdminPage({ onBack }: AdminPageProps) {
   const [currentPromoCode, setCurrentPromoCode] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isSecretSectionVisible, setIsSecretSectionVisible] = useState<boolean>(true);
+  const [loadingVisibility, setLoadingVisibility] = useState(false);
   const userData = getTelegramUserData();
 
   // Загрузка текущего промокода
@@ -71,8 +73,53 @@ export function AdminPage({ onBack }: AdminPageProps) {
     }
   };
 
+  // Загрузка состояния видимости секретного раздела
+  const loadSecretSectionVisibility = async () => {
+    try {
+      const response = await fetch('/api/secret-section-visibility');
+      const data = await response.json();
+      setIsSecretSectionVisible(data.isVisible);
+    } catch (error) {
+      console.error('Error loading secret section visibility:', error);
+    }
+  };
+
+  // Переключение видимости секретного раздела
+  const toggleSecretSectionVisibility = async () => {
+    if (!userData?.id) {
+      toast.error('Ошибка авторизации');
+      return;
+    }
+
+    setLoadingVisibility(true);
+    try {
+      const response = await fetch('/api/secret-section-visibility', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: userData.id }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsSecretSectionVisible(data.isVisible);
+        toast.success(data.message);
+      } else {
+        toast.error(data.error || 'Ошибка изменения видимости');
+      }
+    } catch (error) {
+      console.error('Error toggling secret section visibility:', error);
+      toast.error('Ошибка изменения видимости');
+    } finally {
+      setLoadingVisibility(false);
+    }
+  };
+
   useEffect(() => {
     loadPromoCode();
+    loadSecretSectionVisibility();
   }, []);
 
   return (
@@ -131,6 +178,51 @@ export function AdminPage({ onBack }: AdminPageProps) {
 
               <p className="text-sm text-gray-600 text-center">
                 Новый промокод генерируется ежедневно для доступа к алкогольному разделу
+              </p>
+            </div>
+          </div>
+
+          {/* Управление видимостью секретного раздела */}
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Видимость секретного раздела</h3>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-700">Секретный раздел в магазине</p>
+                  <p className="text-xs text-gray-500">
+                    {isSecretSectionVisible ? 'Виден всем пользователям' : 'Скрыт от пользователей'}
+                  </p>
+                </div>
+                <div
+                  className={`w-12 h-6 rounded-full transition-colors ${
+                    isSecretSectionVisible ? 'bg-[#0088cc]' : 'bg-gray-300'
+                  }`}
+                >
+                  <div
+                    className={`w-5 h-5 bg-white rounded-full transition-transform ${
+                      isSecretSectionVisible ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={toggleSecretSectionVisibility}
+                disabled={loadingVisibility}
+                className="w-full bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
+              >
+                <span>
+                  {loadingVisibility
+                    ? 'Изменение...'
+                    : isSecretSectionVisible
+                    ? 'Скрыть раздел'
+                    : 'Показать раздел'}
+                </span>
+              </button>
+
+              <p className="text-sm text-gray-600 text-center">
+                Управление видимостью блока "Секретный раздел" в магазине
               </p>
             </div>
           </div>
