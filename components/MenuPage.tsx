@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Header } from './Header';
 import { Plus, Minus, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
-import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
+// Tabs (Radix) replaced with simple buttons in this page to ensure consistent styling across builds
+// import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { Button } from './ui/button';
 import { sendOrderToTelegram, getTelegramUserData, formatUserName } from '../lib/telegram-api';
 
@@ -26,53 +27,45 @@ export function MenuPage({ onBack }: MenuPageProps) {
   const [orderDate, setOrderDate] = useState<'tomorrow' | 'dayAfter'>('tomorrow');
   const [cart, setCart] = useState<OrderItem[]>([]);
 
+  // Simplified menu: one complex meal per meal type as requested
   const breakfastItems: MenuItem[] = [
-    { id: 'b1', name: 'Омлет с овощами', price: 250, category: 'breakfast' },
-    { id: 'b2', name: 'Блины с вареньем', price: 200, category: 'breakfast' },
-    { id: 'b3', name: 'Каша овсяная', price: 150, category: 'breakfast' },
-    { id: 'b4', name: 'Сырники со сметаной', price: 280, category: 'breakfast' },
-    { id: 'b5', name: 'Бутерброды с сыром', price: 180, category: 'breakfast' },
+    { id: 'b-complex', name: 'Завтрак комплексный', price: 500, category: 'breakfast' },
   ];
 
   const dinnerItems: MenuItem[] = [
-    { id: 'd1', name: 'Борщ домашний', price: 300, category: 'dinner' },
-    { id: 'd2', name: 'Плов узбекский', price: 400, category: 'dinner' },
-    { id: 'd3', name: 'Котлеты с пюре', price: 350, category: 'dinner' },
-    { id: 'd4', name: 'Рыба на пару с овощами', price: 450, category: 'dinner' },
-    { id: 'd5', name: 'Салат Цезарь', price: 280, category: 'dinner' },
-    { id: 'd6', name: 'Компот домашний', price: 80, category: 'dinner' },
+    { id: 'd-complex', name: 'Ужин комплексный', price: 1000, category: 'dinner' },
   ];
 
   const currentItems = mealType === 'breakfast' ? breakfastItems : dinnerItems;
 
   const addToCart = (item: MenuItem) => {
-    const existingItem = cart.find(cartItem => cartItem.id === item.id);
+    const existingItem = cart.find((cartItem) => cartItem.id === item.id);
     if (existingItem) {
-      setCart(cart.map(cartItem =>
-        cartItem.id === item.id
-          ? { ...cartItem, quantity: cartItem.quantity + 1 }
-          : cartItem
-      ));
+      setCart(
+        cart.map((cartItem) =>
+          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+        )
+      );
     } else {
       setCart([...cart, { ...item, quantity: 1 }]);
     }
   };
 
   const removeFromCart = (itemId: string) => {
-    const existingItem = cart.find(cartItem => cartItem.id === itemId);
+    const existingItem = cart.find((cartItem) => cartItem.id === itemId);
     if (existingItem && existingItem.quantity > 1) {
-      setCart(cart.map(cartItem =>
-        cartItem.id === itemId
-          ? { ...cartItem, quantity: cartItem.quantity - 1 }
-          : cartItem
-      ));
+      setCart(
+        cart.map((cartItem) =>
+          cartItem.id === itemId ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
+        )
+      );
     } else {
-      setCart(cart.filter(cartItem => cartItem.id !== itemId));
+      setCart(cart.filter((cartItem) => cartItem.id !== itemId));
     }
   };
 
   const getItemQuantity = (itemId: string) => {
-    return cart.find(item => item.id === itemId)?.quantity || 0;
+    return cart.find((item) => item.id === itemId)?.quantity || 0;
   };
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -85,15 +78,15 @@ export function MenuPage({ onBack }: MenuPageProps) {
 
     const dateText = orderDate === 'tomorrow' ? 'завтра' : 'послезавтра';
     const mealText = mealType === 'breakfast' ? 'Завтрак' : 'Ужин';
-    
+
     // Показываем индикатор загрузки
     const loadingToast = toast.loading('Отправляем заказ...');
-    
+
     try {
       // Получаем данные пользователя из Telegram
       const userData = getTelegramUserData();
       const userName = formatUserName(userData);
-      
+
       // Отправляем заказ в Telegram
       const success = await sendOrderToTelegram({
         items: cart,
@@ -103,13 +96,13 @@ export function MenuPage({ onBack }: MenuPageProps) {
         userName,
         userId: userData?.id,
       });
-      
+
       if (success) {
         toast.success(`Заказ на ${dateText} отправлен администратору!`, {
           description: `${mealText} на сумму ${totalPrice} ₽`,
           id: loadingToast,
         });
-        
+
         // Очищаем корзину
         setCart([]);
       } else {
@@ -129,15 +122,33 @@ export function MenuPage({ onBack }: MenuPageProps) {
   return (
     <div className="min-h-screen bg-white pb-32 overflow-y-auto">
       <Header title="Меню" onBack={onBack} />
-      
+
       <div className="px-4 py-6">
-        {/* Meal Type Switcher */}
-        <Tabs value={mealType} onValueChange={(value) => setMealType(value as 'breakfast' | 'dinner')} className="mb-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="breakfast">Завтрак</TabsTrigger>
-            <TabsTrigger value="dinner">Ужин</TabsTrigger>
-          </TabsList>
-        </Tabs>
+        {/* Meal Type Switcher - simple buttons to avoid data-attribute/Tailwind mismatch on some builds */}
+        <div className="mb-6">
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              aria-pressed={mealType === 'breakfast'}
+              onClick={() => setMealType('breakfast')}
+              className={`rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${
+                mealType === 'breakfast' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'
+              }`}
+            >
+              Завтрак
+            </button>
+            <button
+              type="button"
+              aria-pressed={mealType === 'dinner'}
+              onClick={() => setMealType('dinner')}
+              className={`rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${
+                mealType === 'dinner' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'
+              }`}
+            >
+              Ужин
+            </button>
+          </div>
+        </div>
 
         {/* Date Selection */}
         <div className="mb-6">
@@ -150,7 +161,9 @@ export function MenuPage({ onBack }: MenuPageProps) {
               type="button"
               aria-pressed={orderDate === 'tomorrow'}
               onClick={() => setOrderDate('tomorrow')}
-              className={`flex-1 rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${orderDate === 'tomorrow' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'}`}
+              className={`flex-1 rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${
+                orderDate === 'tomorrow' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'
+              }`}
             >
               Завтра
             </button>
@@ -158,7 +171,9 @@ export function MenuPage({ onBack }: MenuPageProps) {
               type="button"
               aria-pressed={orderDate === 'dayAfter'}
               onClick={() => setOrderDate('dayAfter')}
-              className={`flex-1 rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${orderDate === 'dayAfter' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'}`}
+              className={`flex-1 rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${
+                orderDate === 'dayAfter' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'
+              }`}
             >
               Послезавтра
             </button>
@@ -167,7 +182,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
 
         {/* Menu Items */}
         <div className="space-y-3">
-          {currentItems.map(item => {
+          {currentItems.map((item) => {
             const quantity = getItemQuantity(item.id);
             return (
               <div
@@ -175,12 +190,8 @@ export function MenuPage({ onBack }: MenuPageProps) {
                 className="flex items-center justify-between p-4 bg-[#f5f5f5] rounded-lg"
               >
                 <div className="flex-1">
-                  <h3 className="text-[16px] font-semibold mb-1 text-[#000000]">
-                    {item.name}
-                  </h3>
-                  <p className="text-[16px] text-[#0088cc] font-semibold">
-                    {item.price} ₽
-                  </p>
+                  <h3 className="text-[16px] font-semibold mb-1 text-[#000000]">{item.name}</h3>
+                  <p className="text-[16px] text-[#0088cc] font-semibold">{item.price} ₽</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <button
@@ -191,9 +202,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
                   >
                     <Minus size={16} />
                   </button>
-                  <span className="w-6 text-center text-[16px] font-semibold">
-                    {quantity}
-                  </span>
+                  <span className="w-6 text-center text-[16px] font-semibold">{quantity}</span>
                   <button
                     onClick={() => addToCart(item)}
                     className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#0088cc] text-white hover:bg-[#0077b3] transition-all"
@@ -215,9 +224,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
             <div className="mb-3">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-[14px] text-[#666666]">Итого:</span>
-                <span className="text-[20px] font-semibold text-[#000000]">
-                  {totalPrice} ₽
-                </span>
+                <span className="text-[20px] font-semibold text-[#000000]">{totalPrice} ₽</span>
               </div>
               <p className="text-[14px] text-[#666666]">
                 {cart.reduce((sum, item) => sum + item.quantity, 0)} позиций

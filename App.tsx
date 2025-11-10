@@ -74,7 +74,7 @@ export default function App() {
         {currentPage === 'about' && <AboutPage onBack={navigateBack} />}
         {currentPage === 'admin' && <AdminPage onBack={navigateBack} />}
       </div>
-      <Toaster position="top-center" />
+      <Toaster position="bottom-center" />
     </div>
   );
 }
