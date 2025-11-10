@@ -1,12 +1,16 @@
-import { MapPin, UtensilsCrossed, ShoppingBag, Info } from 'lucide-react';
+import { MapPin, UtensilsCrossed, ShoppingBag, Info, Shield } from 'lucide-react';
 import { Page } from '../App';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { getTelegramUserData } from '../lib/telegram-api';
 
 interface HomePageProps {
   onNavigate: (page: Page) => void;
 }
 
 export function HomePage({ onNavigate }: HomePageProps) {
+  const userData = getTelegramUserData();
+  const isAdmin = userData?.id === 515650034;
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* Header */}
@@ -42,6 +46,14 @@ export function HomePage({ onNavigate }: HomePageProps) {
             description="Информация о гостевом доме"
             onClick={() => onNavigate('about')}
           />
+          {isAdmin && (
+            <NavigationButton
+              icon={<Shield size={32} />}
+              title="Админ панель"
+              description="Управление контентом"
+              onClick={() => onNavigate('admin')}
+            />
+          )}
         </div>
       </div>
 
@@ -52,8 +64,8 @@ export function HomePage({ onNavigate }: HomePageProps) {
           <a href="https://t.me/guesthouse" className="text-[16px] text-[#0088cc]">
             @guesthouse
           </a>
-          <a href="tel:+79001234567" className="text-[16px] text-[#0088cc]">
-            +7 (900) 123-45-67
+          <a href="tel:+79212265444" className="text-[16px] text-[#0088cc]">
+            +7 (921) 226-54-44
           </a>
         </div>
       </div>
