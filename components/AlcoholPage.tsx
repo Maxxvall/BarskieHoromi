@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from './Header';
 import { Lock, AlertCircle } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
@@ -11,10 +11,40 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
   const [promoCode, setPromoCode] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [error, setError] = useState('');
+  const [validCode, setValidCode] = useState<string>('');
 
-  // Generate current month code (e.g., "NOV2025")
+  // Загрузка текущего промокода
+  useEffect(() => {
+    const loadPromoCode = async () => {
+      try {
+        const response = await fetch('/api/promo-code');
+        const data = await response.json();
+        setValidCode(data.promoCode);
+      } catch (error) {
+        console.error('Error loading promo code:', error);
+        setError('Ошибка загрузки промокода');
+      }
+    };
+
+    loadPromoCode();
+  }, []);
+
+  // Generate current month code (fallback)
   const getCurrentMonthCode = () => {
-    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    const months = [
+      'JAN',
+      'FEB',
+      'MAR',
+      'APR',
+      'MAY',
+      'JUN',
+      'JUL',
+      'AUG',
+      'SEP',
+      'OCT',
+      'NOV',
+      'DEC',
+    ];
     const now = new Date();
     return `${months[now.getMonth()]}${now.getFullYear()}`;
   };
@@ -54,9 +84,10 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
     e.preventDefault();
     setError('');
 
-    const validCode = getCurrentMonthCode();
-    
-    if (promoCode.toUpperCase() === validCode) {
+    // Используем загруженный промокод или fallback
+    const codeToCheck = validCode || getCurrentMonthCode();
+
+    if (promoCode.toUpperCase() === codeToCheck) {
       setIsUnlocked(true);
     } else {
       setError('Промокод недействителен. Спросите код у администратора.');
@@ -67,7 +98,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
     return (
       <div className="min-h-screen bg-white overflow-y-auto">
         <Header title="Назад" onBack={onBack} />
-        
+
         <div className="px-4 py-8">
           <div className="max-w-md mx-auto">
             {/* Lock Icon */}
@@ -82,7 +113,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
               Введите промокод
             </h2>
             <p className="text-[14px] text-[#666666] text-center mb-8">
-              Промокод находится в карточке при заселении. Он обновляется каждый месяц.
+              Промокод находится в карточке при заселении. Он обновляется каждый день.
             </p>
 
             {/* Form */}
@@ -122,18 +153,16 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
   return (
     <div className="min-h-screen bg-white overflow-y-auto">
       <Header title="Назад" onBack={onBack} />
-      
+
       <div className="px-4 py-6">
         {/* Success Message */}
         <div className="mb-6 p-4 bg-[#52a547]/10 border border-[#52a547]/20 rounded-lg">
-          <p className="text-[14px] text-[#52a547] text-center font-semibold">
-            Доступ разрешен
-          </p>
+          <p className="text-[14px] text-[#52a547] text-center font-semibold">Доступ разрешен</p>
         </div>
 
         {/* Alcohol Items */}
         <div className="grid grid-cols-2 gap-3">
-          {alcoholItems.map(item => (
+          {alcoholItems.map((item) => (
             <div
               key={item.id}
               className="bg-white rounded-lg border border-[#e9e9e9] overflow-hidden shadow-sm"
@@ -150,9 +179,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
                   {item.name}
                 </h3>
                 <p className="text-[12px] text-[#666666] mb-2">{item.volume}</p>
-                <p className="text-[16px] text-[#0088cc] font-semibold">
-                  {item.price} ₽
-                </p>
+                <p className="text-[16px] text-[#0088cc] font-semibold">{item.price} ₽</p>
               </div>
             </div>
           ))}
