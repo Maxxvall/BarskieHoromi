@@ -1,5 +1,22 @@
 // Утилита для отправки заказов в Telegram через API
 
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp: {
+        initDataUnsafe?: {
+          user?: {
+            id: number;
+            first_name?: string;
+            last_name?: string;
+            username?: string;
+          };
+        };
+      };
+    };
+  }
+}
+
 interface OrderItem {
   id: string;
   name: string;
@@ -42,8 +59,8 @@ export async function sendOrderToTelegram(params: SendOrderParams): Promise<bool
 // Получаем данные пользователя из Telegram Web App
 export function getTelegramUserData() {
   if (typeof window === 'undefined') return null;
-  
-  const tg = (window as any).Telegram?.WebApp;
+
+  const tg = window.Telegram?.WebApp;
   if (!tg || !tg.initDataUnsafe?.user) return null;
 
   return {
@@ -57,13 +74,13 @@ export function getTelegramUserData() {
 // Форматирует имя пользователя
 export function formatUserName(userData: ReturnType<typeof getTelegramUserData>): string {
   if (!userData) return 'Гость';
-  
+
   const parts = [userData.firstName, userData.lastName].filter(Boolean);
   const name = parts.join(' ');
-  
+
   if (userData.username) {
     return `${name} (@${userData.username})`;
   }
-  
+
   return name || 'Гость';
 }
