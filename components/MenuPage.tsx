@@ -16,6 +16,7 @@ interface MenuItem {
   name: string;
   price: number;
   category: string;
+  description: string;
 }
 
 interface OrderItem extends MenuItem {
@@ -29,11 +30,25 @@ export function MenuPage({ onBack }: MenuPageProps) {
 
   // Simplified menu: one complex meal per meal type as requested
   const breakfastItems: MenuItem[] = [
-    { id: 'b-complex', name: 'Завтрак комплексный', price: 500, category: 'breakfast' },
+    {
+      id: 'b-complex',
+      name: 'Завтрак комплексный',
+      price: 500,
+      category: 'breakfast',
+      description:
+        'Комплексный завтрак предлагает разнообразие свежих блюд на выбор. Пожалуйста, уточните ваши предпочтения при заказе — мы подберём идеальный вариант из доступных ингредиентов!',
+    },
   ];
 
   const dinnerItems: MenuItem[] = [
-    { id: 'd-complex', name: 'Ужин комплексный', price: 1000, category: 'dinner' },
+    {
+      id: 'd-complex',
+      name: 'Ужин комплексный',
+      price: 1000,
+      category: 'dinner',
+      description:
+        'Комплексный ужин включает тщательно подобранные блюда для вашего удовольствия. Уточните состав при заказе, чтобы мы могли предложить вам наилучшие варианты и учесть все пожелания!',
+    },
   ];
 
   const currentItems = mealType === 'breakfast' ? breakfastItems : dinnerItems;
@@ -185,32 +200,32 @@ export function MenuPage({ onBack }: MenuPageProps) {
           {currentItems.map((item) => {
             const quantity = getItemQuantity(item.id);
             return (
-              <div
-                key={item.id}
-                className="flex items-center justify-between p-4 bg-[#f5f5f5] rounded-lg"
-              >
-                <div className="flex-1">
-                  <h3 className="text-[16px] font-semibold mb-1 text-[#000000]">{item.name}</h3>
-                  <p className="text-[16px] text-[#0088cc] font-semibold">{item.price} ₽</p>
+              <div key={item.id}>
+                <div className="flex items-center justify-between p-4 bg-[#f5f5f5] rounded-lg">
+                  <div className="flex-1">
+                    <h3 className="text-[16px] font-semibold mb-1 text-[#000000]">{item.name}</h3>
+                    <p className="text-[16px] text-[#0088cc] font-semibold">{item.price} ₽</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => removeFromCart(item.id)}
+                      disabled={quantity === 0}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-[#e9e9e9] text-[#666666] hover:border-[#0088cc] hover:text-[#0088cc] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      aria-label="Уменьшить количество"
+                    >
+                      <Minus size={16} />
+                    </button>
+                    <span className="w-6 text-center text-[16px] font-semibold">{quantity}</span>
+                    <button
+                      onClick={() => addToCart(item)}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#0088cc] text-white hover:bg-[#0077b3] transition-all"
+                      aria-label="Увеличить количество"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => removeFromCart(item.id)}
-                    disabled={quantity === 0}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-[#e9e9e9] text-[#666666] hover:border-[#0088cc] hover:text-[#0088cc] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                    aria-label="Уменьшить количество"
-                  >
-                    <Minus size={16} />
-                  </button>
-                  <span className="w-6 text-center text-[16px] font-semibold">{quantity}</span>
-                  <button
-                    onClick={() => addToCart(item)}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#0088cc] text-white hover:bg-[#0077b3] transition-all"
-                    aria-label="Увеличить количество"
-                  >
-                    <Plus size={16} />
-                  </button>
-                </div>
+                <p className="text-[14px] text-[#666666] mt-2 px-4">{item.description}</p>
               </div>
             );
           })}

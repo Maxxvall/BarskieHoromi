@@ -51,7 +51,7 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
   return (
     <div className="min-h-screen bg-white overflow-y-auto">
       <Header title="Магазин" onBack={onBack} />
-      
+
       <div className="px-4 py-6">
         {/* Alcohol Promo Section (moved above souvenirs) */}
         <div className="mb-8">
@@ -61,9 +61,7 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
                 <Lock size={24} className="text-[#0088cc]" />
               </div>
               <div className="flex-1">
-                <h3 className="text-[16px] font-semibold mb-2 text-[#000000]">
-                  Секретный раздел
-                </h3>
+                <h3 className="text-[16px] font-semibold mb-2 text-[#000000]">Секретный раздел</h3>
                 {/* Description removed as requested */}
               </div>
             </div>
@@ -78,11 +76,9 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
 
         {/* Souvenirs Section */}
         <div className="mb-8">
-          <h2 className="text-[17px] font-semibold mb-4 text-[#000000]">
-            Сувениры
-          </h2>
+          <h2 className="text-[17px] font-semibold mb-4 text-[#000000]">Сувениры</h2>
           <div className="grid grid-cols-2 gap-3">
-            {souvenirs.map(souvenir => (
+            {souvenirs.map((souvenir) => (
               <div
                 key={souvenir.id}
                 className="bg-white rounded-lg border border-[#e9e9e9] overflow-hidden shadow-sm"
@@ -98,9 +94,7 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
                   <h3 className="text-[14px] font-semibold mb-2 text-[#000000] line-clamp-2">
                     {souvenir.name}
                   </h3>
-                  <p className="text-[16px] text-[#0088cc] font-semibold">
-                    {souvenir.price} ₽
-                  </p>
+                  <p className="text-[16px] text-[#0088cc] font-semibold">{souvenir.price} ₽</p>
                 </div>
               </div>
             ))}
@@ -110,7 +104,7 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
         {/* Info Text */}
         <div className="mt-6 p-4 bg-[#f5f5f5] rounded-lg">
           <p className="text-[14px] text-[#666666] text-center">
-            Все товары можно приобрести при выезде на ресепшене
+            Все товары можно приобрести обратившись к хозяевам дома
           </p>
         </div>
       </div>
