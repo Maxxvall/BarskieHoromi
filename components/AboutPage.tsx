@@ -135,24 +135,6 @@ export function AboutPage({ onBack }: AboutPageProps) {
             </a>
           </div>
         </div>
-
-        {/* Additional Info */}
-        <div className="p-4 bg-[#f5f5f5] rounded-lg">
-          <p className="text-[14px] text-[#666666] text-center mb-2">Режим работы администрации</p>
-          <p className="text-[16px] text-[#000000] text-center font-semibold">
-            Ежедневно с 8:00 до 22:00
-          </p>
-        </div>
-
-        {/* Call to Action */}
-        <div className="mt-6">
-          <a
-            href="https://t.me/firemannn3"
-            className="block w-full py-4 bg-[#0088cc] text-white text-center rounded-lg font-semibold hover:bg-[#0077b3] transition-all"
-          >
-            Написать администратору
-          </a>
-        </div>
       </div>
     </div>
   );
