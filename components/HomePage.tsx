@@ -29,24 +29,28 @@ export function HomePage({ onNavigate }: HomePageProps) {
             title="Достопримечательности"
             description="Места для посещения"
             onClick={() => onNavigate('attractions')}
+            delay={0}
           />
           <NavigationButton
             icon={<UtensilsCrossed size={32} />}
             title="Меню"
             description="Заказать завтрак или ужин"
             onClick={() => onNavigate('menu')}
+            delay={0.1}
           />
           <NavigationButton
             icon={<ShoppingBag size={32} />}
             title="Магазин"
             description="Сувениры и товары"
             onClick={() => onNavigate('shop')}
+            delay={0.2}
           />
           <NavigationButton
             icon={<Info size={32} />}
             title="О нас"
             description="Информация о гостевом доме"
             onClick={() => onNavigate('about')}
+            delay={0.3}
           />
           {isAdmin && (
             <NavigationButton
@@ -54,6 +58,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               title="Админ панель"
               description="Управление контентом"
               onClick={() => onNavigate('admin')}
+              delay={0.4}
             />
           )}
         </div>
@@ -85,13 +90,15 @@ interface NavigationButtonProps {
   title: string;
   description: string;
   onClick: () => void;
+  delay: number;
 }
 
-function NavigationButton({ icon, title, description, onClick }: NavigationButtonProps) {
+function NavigationButton({ icon, title, description, onClick, delay }: NavigationButtonProps) {
   return (
     <Card
-      className="cursor-pointer hover:border-[#0088cc] transition-all duration-200 hover:shadow-md"
+      className="cursor-pointer hover:border-[#0088cc] transition-all duration-200 hover:shadow-md opacity-0 animate-fade-in-up"
       onClick={onClick}
+      style={{ animationDelay: `${delay}s` }}
     >
       {/* Используем flex для выравнивания иконки и текстов в одну строку */}
       <CardHeader className="flex items-center gap-4 p-4">
