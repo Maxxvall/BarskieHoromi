@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Toaster } from 'sonner';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { HomePage } from './components/HomePage';
 import { AttractionsPage } from './components/AttractionsPage';
 import { MenuPage } from './components/MenuPage';
@@ -75,6 +76,7 @@ export default function App() {
         {currentPage === 'admin' && <AdminPage onBack={navigateBack} />}
       </div>
       <Toaster position="bottom-center" />
+      <SpeedInsights />
     </div>
   );
 }
