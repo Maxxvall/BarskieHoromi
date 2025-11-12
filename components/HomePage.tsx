@@ -64,6 +64,16 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </div>
 
+      {/* Important Notice */}
+      <div className="px-4 py-4 bg-yellow-50 border-t border-yellow-200">
+        <h3 className="text-[16px] font-semibold text-yellow-800 mb-2">Обязательно к соблюдению:</h3>
+        <ul className="text-[14px] text-yellow-700 space-y-1">
+          <li>• С животными запрещено</li>
+          <li>• Курить на территории гостевого дома запрещено</li>
+          <li>• Соблюдать тишину с 23:00 до 7:00</li>
+        </ul>
+      </div>
+
       {/* Contact Footer */}
       <div className="px-6 py-4 bg-[#f5f5f5] border-t border-[#e9e9e9]">
         <p className="text-[14px] text-[#666666] mb-2">Связаться с нами:</p>
