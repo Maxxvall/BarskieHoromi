@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Toaster } from 'sonner';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { Analytics } from '@vercel/analytics/react';
 import { HomePage } from './components/HomePage';
 import { AttractionsPage } from './components/AttractionsPage';
 import { MenuPage } from './components/MenuPage';
@@ -77,6 +78,7 @@ export default function App() {
       </div>
       <Toaster position="bottom-center" />
       <SpeedInsights />
+      <Analytics />
     </div>
   );
 }
