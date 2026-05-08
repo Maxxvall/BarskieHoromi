@@ -64,22 +64,30 @@ const hideLoading = () => {
     try {
       let webAppData: string | null = null;
 
-      // Попытка 1: из URL hash
+      // Способ 1: из URL hash (некоторые платформы передают данные так)
       const hash = window.location.hash ? window.location.hash.slice(1) : '';
       if (hash) {
         const params = new URLSearchParams(hash);
-        webAppData = params.get('WebAppData');
+        webAppData = params.get('WebAppData') || null;
       }
 
-      // Попытка 2: из MAX WebApp SDK initData
-      if (!webAppData && mw.initData) {
+      // Способ 2: из MAX WebApp SDK initData
+      if (
+        !webAppData &&
+        mw.initData &&
+        typeof mw.initData === 'string' &&
+        mw.initData.length > 0
+      ) {
         webAppData = mw.initData;
       }
 
-      console.log('WebAppData source:', webAppData ? 'found' : 'not found', {
-        fromHash: !!(hash && new URLSearchParams(hash).get('WebAppData')),
-        fromInitData: !!mw.initData,
+      // Диагностика — поможет понять, откуда приходят данные
+      console.log('WebAppData debug:', {
+        hashPresent: !!hash,
+        hashWebAppData: hash ? !!new URLSearchParams(hash).get('WebAppData') : false,
+        initData: mw.initData ? (typeof mw.initData === 'string' ? mw.initData.substring(0, 80) + '...' : '[non-string]') : null,
         initDataUnsafe: mw.initDataUnsafe,
+        webAppDataFound: !!webAppData,
       });
 
       if (webAppData) {
@@ -96,14 +104,6 @@ const hideLoading = () => {
           (window as any).__IS_ADMIN = !!json.isAdmin;
           if (json.isAdmin) sessionStorage.setItem('isAdmin', '1');
           else sessionStorage.removeItem('isAdmin');
-        } catch (e) {
-          // ignore
-        }
-      } else if (mw.initDataUnsafe && mw.initDataUnsafe.user) {
-        // Есть небезопасные данные — используем для отображения, но не для определения админа
-        try {
-          (window as any).__MAX_WEBAPP_USER = mw.initDataUnsafe.user;
-          sessionStorage.removeItem('isAdmin');
         } catch (e) {
           // ignore
         }
