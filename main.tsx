@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './styles/globals.css';
-import { cleanupOldCache, getCacheStats } from './lib/imageCache';
 
 // Инициализация Telegram Web App
 if ((window as any).Telegram?.WebApp) {
@@ -31,7 +30,25 @@ const hideLoading = () => {
   }
 };
 
-(async () => {
+ (async () => {
+  // Разрегистрация старого Service Worker (если был установлен ранее)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const registration of registrations) {
+        registration.unregister();
+        console.log('Service Worker разрегистрирован:', registration.scope);
+      }
+    });
+    // Очистить все кэши SW
+    if ('caches' in window) {
+      caches.keys().then((names) => {
+        for (const name of names) {
+          caches.delete(name);
+        }
+      });
+    }
+  }
+
   // Инициализация MAX Web App (если доступен) и синхронная валидация
   if ((window as any).WebApp) {
     const mw = (window as any).WebApp;
@@ -45,50 +62,60 @@ const hideLoading = () => {
     });
 
     try {
+      let webAppData: string | null = null;
+
+      // Попытка 1: из URL hash
       const hash = window.location.hash ? window.location.hash.slice(1) : '';
       if (hash) {
         const params = new URLSearchParams(hash);
-        const webAppData = params.get('WebAppData');
-        if (webAppData) {
-          const resp = await fetch('/api/validate-init', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ webAppData }),
-          });
-          const json = await resp.json().catch(() => ({}));
-          console.log('validate-init result:', json);
+        webAppData = params.get('WebAppData');
+      }
 
-          try {
-            (window as any).__MAX_WEBAPP_USER = json.user || null;
-            (window as any).__IS_ADMIN = !!json.isAdmin;
-            if (json.isAdmin) sessionStorage.setItem('isAdmin', '1');
-            else sessionStorage.removeItem('isAdmin');
-          } catch (e) {
-            // ignore
-          }
+      // Попытка 2: из MAX WebApp SDK initData
+      if (!webAppData && mw.initData) {
+        webAppData = mw.initData;
+      }
+
+      console.log('WebAppData source:', webAppData ? 'found' : 'not found', {
+        fromHash: !!(hash && new URLSearchParams(hash).get('WebAppData')),
+        fromInitData: !!mw.initData,
+        initDataUnsafe: mw.initDataUnsafe,
+      });
+
+      if (webAppData) {
+        const resp = await fetch('/api/validate-init', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ webAppData }),
+        });
+        const json = await resp.json().catch(() => ({}));
+        console.log('validate-init result:', json);
+
+        try {
+          (window as any).__MAX_WEBAPP_USER = json.user || null;
+          (window as any).__IS_ADMIN = !!json.isAdmin;
+          if (json.isAdmin) sessionStorage.setItem('isAdmin', '1');
+          else sessionStorage.removeItem('isAdmin');
+        } catch (e) {
+          // ignore
+        }
+      } else if (mw.initDataUnsafe && mw.initDataUnsafe.user) {
+        // Есть небезопасные данные — используем для отображения, но не для определения админа
+        try {
+          (window as any).__MAX_WEBAPP_USER = mw.initDataUnsafe.user;
+          sessionStorage.removeItem('isAdmin');
+        } catch (e) {
+          // ignore
         }
       }
     } catch (err) {
       console.error('validate-init error', err);
     }
-  }
 
-  // Очистка старого кэша изображений при запуске
-  cleanupOldCache();
-  const cacheStats = getCacheStats();
-  console.log('Статистика кэша изображений:', cacheStats);
-
-  // Регистрация Service Worker для кэширования
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((registration) => {
-          console.log('Service Worker зарегистрирован:', registration.scope);
-        })
-        .catch((error) => {
-          console.log('Ошибка регистрации Service Worker:', error);
-        });
+    console.log('Admin status after validation:', {
+      isAdmin: (window as any).__IS_ADMIN,
+      sessionIsAdmin: sessionStorage.getItem('isAdmin'),
+      user: (window as any).__MAX_WEBAPP_USER,
     });
   }
 
