@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 
 /**
- * Telegram WebApp интерфейс
+ * Универсальный WebApp интерфейс (Telegram или MAX)
  */
 export interface TelegramWebApp {
   initData: string;
@@ -31,7 +31,7 @@ export interface TelegramWebApp {
   showAlert(message: string, callback?: () => void): void;
   showConfirm(message: string, callback?: (confirmed: boolean) => void): void;
   openLink(url: string, options?: { try_instant_view?: boolean }): void;
-  openTelegramLink(url: string): void;
+  openTelegramLink?(url: string): void;
   sendData(data: string): void;
 }
 
@@ -39,9 +39,18 @@ export interface TelegramWebApp {
  * Получить экземпляр Telegram WebApp
  */
 export const getTelegramWebApp = (): TelegramWebApp | null => {
-  if (typeof window !== 'undefined' && (window as any).Telegram?.WebApp) {
+  if (typeof window === 'undefined') return null;
+
+  // Telegram WebApp
+  if ((window as any).Telegram?.WebApp) {
     return (window as any).Telegram.WebApp;
   }
+
+  // MAX WebApp
+  if ((window as any).WebApp) {
+    return (window as any).WebApp;
+  }
+
   return null;
 };
 
@@ -49,7 +58,8 @@ export const getTelegramWebApp = (): TelegramWebApp | null => {
  * Проверить, запущено ли приложение в Telegram
  */
 export const isTelegramWebApp = (): boolean => {
-  return getTelegramWebApp() !== null;
+  if (typeof window === 'undefined') return false;
+  return !!(window as any).Telegram?.WebApp;
 };
 
 /**
@@ -95,7 +105,10 @@ export const useTelegramWebApp = () => {
     webApp,
     colorScheme,
     isExpanded,
-    isTelegram: webApp !== null,
+    // isTelegram - true only when running inside Telegram WebApp
+    isTelegram: typeof window !== 'undefined' && !!(window as any).Telegram?.WebApp,
+    // isMax - true when running inside MAX WebApp
+    isMax: typeof window !== 'undefined' && !!(window as any).WebApp,
   };
 };
 

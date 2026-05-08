@@ -23,6 +23,41 @@ if ((window as any).Telegram?.WebApp) {
   });
 }
 
+// Инициализация MAX Web App (если доступен)
+if ((window as any).WebApp) {
+  const mw = (window as any).WebApp;
+
+  if (typeof mw.expand === 'function') mw.expand();
+  if (typeof mw.ready === 'function') mw.ready();
+
+  console.log('MAX Web App initialized:', {
+    version: mw.version,
+    platform: mw.platform,
+  });
+
+  // Попытка отправить WebAppData на сервер для валидации подписи
+  (async () => {
+    try {
+      const hash = window.location.hash ? window.location.hash.slice(1) : '';
+      if (!hash) return;
+      const params = new URLSearchParams(hash);
+      const webAppData = params.get('WebAppData');
+      if (!webAppData) return;
+
+      const resp = await fetch('/api/validate-init', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ webAppData }),
+      });
+
+      const json = await resp.json();
+      console.log('validate-init result:', json);
+    } catch (err) {
+      console.error('validate-init error', err);
+    }
+  })();
+}
+
 // Очистка старого кэша изображений при запуске
 cleanupOldCache();
 const cacheStats = getCacheStats();

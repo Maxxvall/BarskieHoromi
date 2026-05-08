@@ -35,12 +35,15 @@ interface SendOrderParams {
 
 export async function sendOrderToTelegram(params: SendOrderParams): Promise<boolean> {
   try {
+    const isMax = typeof window !== 'undefined' && !!(window as any).WebApp;
+    const platform = isMax ? 'max' : 'telegram';
+
     const response = await fetch('/api/send-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(params),
+      body: JSON.stringify({ ...params, platform }),
     });
 
     if (!response.ok) {
