@@ -1,7 +1,6 @@
 import { MapPin, UtensilsCrossed, ShoppingBag, Info, Shield, Send, Phone } from 'lucide-react';
 import { Page } from '../App';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { getTelegramUserData } from '../lib/telegram-api';
 import { useTelegramWebApp } from '../lib/telegram';
 
 interface HomePageProps {
@@ -9,7 +8,6 @@ interface HomePageProps {
 }
 
 export function HomePage({ onNavigate }: HomePageProps) {
-  const userData = getTelegramUserData();
   const { webApp } = useTelegramWebApp();
 
   // Admin detection: prefer server-validated flag (sessionStorage or global)
