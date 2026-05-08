@@ -56,29 +56,31 @@ const hideLoading = () => {
     if (typeof mw.expand === 'function') mw.expand();
     if (typeof mw.ready === 'function') mw.ready();
 
+    // Быстрая диагностика: покажем небезопасные initData (для отладки только)
+    try {
+      console.log('MAX initDataUnsafe:', mw.initDataUnsafe);
+    } catch (e) {
+      // ignore
+    }
+
     console.log('MAX Web App initialized:', {
       version: mw.version,
       platform: mw.platform,
     });
 
     try {
+      // Try initData from the bridge first (works for MAX), fall back to URL hash (legacy)
       let webAppData: string | null = null;
 
-      // Способ 1: из URL hash (некоторые платформы передают данные так)
-      const hash = window.location.hash ? window.location.hash.slice(1) : '';
-      if (hash) {
-        const params = new URLSearchParams(hash);
-        webAppData = params.get('WebAppData') || null;
+      if (mw.initData && typeof mw.initData === 'string' && mw.initData.length > 0) {
+        webAppData = mw.initData;
       }
 
-      // Способ 2: из MAX WebApp SDK initData
-      if (
-        !webAppData &&
-        mw.initData &&
-        typeof mw.initData === 'string' &&
-        mw.initData.length > 0
-      ) {
-        webAppData = mw.initData;
+      // Fallback: try extracting from URL hash (some platforms may pass it there)
+      const hash = window.location.hash ? window.location.hash.slice(1) : '';
+      if (!webAppData && hash) {
+        const params = new URLSearchParams(hash);
+        webAppData = params.get('WebAppData') || null;
       }
 
       // Диагностика — поможет понять, откуда приходят данные
@@ -107,6 +109,8 @@ const hideLoading = () => {
         } catch (e) {
           // ignore
         }
+      } else {
+        console.warn('No WebAppData available from MAX bridge or URL hash');
       }
     } catch (err) {
       console.error('validate-init error', err);
