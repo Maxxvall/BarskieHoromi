@@ -15,7 +15,7 @@ export type Page = 'home' | 'attractions' | 'menu' | 'shop' | 'alcohol' | 'about
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
-  const { webApp, colorScheme, isTelegram } = useTelegramWebApp();
+  const { webApp, colorScheme, isTelegram, isMax } = useTelegramWebApp();
   const haptic = useHapticFeedback();
 
   // Показываем кнопку "Назад" когда не на главной странице
@@ -34,36 +34,36 @@ export default function App() {
   // Настраиваем кнопку "Назад" в Telegram
   useBackButton(shouldShowBackButton ? navigateBack : undefined);
 
-  // Применяем тему Telegram
+  // Применяем тему Telegram / MAX (защищено от отсутствия themeParams)
   useEffect(() => {
-    if (webApp) {
-      // Применяем цвета темы к документу
-      const root = document.documentElement;
-      const theme = webApp.themeParams;
+    if (!webApp) return;
 
-      if (theme.bg_color) root.style.setProperty('--tg-theme-bg-color', theme.bg_color);
-      if (theme.text_color) root.style.setProperty('--tg-theme-text-color', theme.text_color);
-      if (theme.hint_color) root.style.setProperty('--tg-theme-hint-color', theme.hint_color);
-      if (theme.link_color) root.style.setProperty('--tg-theme-link-color', theme.link_color);
-      if (theme.button_color) root.style.setProperty('--tg-theme-button-color', theme.button_color);
-      if (theme.button_text_color)
-        root.style.setProperty('--tg-theme-button-text-color', theme.button_text_color);
-      if (theme.secondary_bg_color)
-        root.style.setProperty('--tg-theme-secondary-bg-color', theme.secondary_bg_color);
+    const root = document.documentElement;
+    const theme = (webApp as any).themeParams || {};
 
-      // Добавляем класс для темной темы
-      if (colorScheme === 'dark') {
-        root.classList.add('dark');
-      } else {
-        root.classList.remove('dark');
-      }
+    if (theme?.bg_color) root.style.setProperty('--tg-theme-bg-color', theme.bg_color);
+    if (theme?.text_color) root.style.setProperty('--tg-theme-text-color', theme.text_color);
+    if (theme?.hint_color) root.style.setProperty('--tg-theme-hint-color', theme.hint_color);
+    if (theme?.link_color) root.style.setProperty('--tg-theme-link-color', theme.link_color);
+    if (theme?.button_color) root.style.setProperty('--tg-theme-button-color', theme.button_color);
+    if (theme?.button_text_color)
+      root.style.setProperty('--tg-theme-button-text-color', theme.button_text_color);
+    if (theme?.secondary_bg_color)
+      root.style.setProperty('--tg-theme-secondary-bg-color', theme.secondary_bg_color);
+
+    // Добавляем класс для темной темы
+    if (colorScheme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
     }
   }, [webApp, colorScheme]);
 
-  // Определяем фоновый цвет в зависимости от того, в Telegram ли мы
-  const bgColor = isTelegram ? 'bg-[var(--tg-theme-bg-color)]' : 'bg-[#f5f5f5]';
+  // Определяем фоновый цвет в зависимости от того, в Telegram или MAX ли мы
+  const inWebApp = isTelegram || isMax;
+  const bgColor = inWebApp ? 'bg-[var(--tg-theme-bg-color)]' : 'bg-[#f5f5f5]';
 
-  const containerBg = isTelegram ? 'bg-[var(--tg-theme-bg-color)]' : 'bg-white';
+  const containerBg = inWebApp ? 'bg-[var(--tg-theme-bg-color)]' : 'bg-white';
 
   return (
     <div className={`min-h-screen ${bgColor}`}>
@@ -77,8 +77,9 @@ export default function App() {
         {currentPage === 'admin' && <AdminPage onBack={navigateBack} />}
       </div>
       <Toaster position="bottom-center" />
-      <SpeedInsights />
-      <Analytics />
+      {/* Temporarily disable Vercel speed/analytics scripts to avoid 404s during deploy */}
+      {/* <SpeedInsights /> */}
+      {/* <Analytics /> */}
     </div>
   );
 }
