@@ -43,7 +43,6 @@ if ((window as any).WebApp) {
       const params = new URLSearchParams(hash);
       const webAppData = params.get('WebAppData');
       if (!webAppData) return;
-
       const resp = await fetch('/api/validate-init', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -52,6 +51,19 @@ if ((window as any).WebApp) {
 
       const json = await resp.json();
       console.log('validate-init result:', json);
+
+      // Expose user / admin information to the client app (safe to store transiently)
+      try {
+        (window as any).__MAX_WEBAPP_USER = json.user || null;
+        (window as any).__IS_ADMIN = !!json.isAdmin;
+        if (json.isAdmin) {
+          sessionStorage.setItem('isAdmin', '1');
+        } else {
+          sessionStorage.removeItem('isAdmin');
+        }
+      } catch (e) {
+        // ignore
+      }
     } catch (err) {
       console.error('validate-init error', err);
     }

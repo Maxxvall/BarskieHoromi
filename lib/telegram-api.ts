@@ -63,14 +63,16 @@ export async function sendOrderToTelegram(params: SendOrderParams): Promise<bool
 export function getTelegramUserData() {
   if (typeof window === 'undefined') return null;
 
-  const tg = window.Telegram?.WebApp;
-  if (!tg || !tg.initDataUnsafe?.user) return null;
+  // Support both Telegram and MAX WebApp globals
+  const app = (window as any).Telegram?.WebApp || (window as any).WebApp;
+  if (!app || !app.initDataUnsafe?.user) return null;
 
+  const user = app.initDataUnsafe.user;
   return {
-    id: tg.initDataUnsafe.user.id,
-    firstName: tg.initDataUnsafe.user.first_name,
-    lastName: tg.initDataUnsafe.user.last_name,
-    username: tg.initDataUnsafe.user.username,
+    id: user.id,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    username: user.username,
   };
 }
 

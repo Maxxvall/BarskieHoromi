@@ -71,7 +71,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const valid = signature === originalHash;
 
-    return res.status(200).json({ valid });
+    // Try to parse user and chat objects from the parameters (they are JSON strings)
+    let parsedUser: any = null;
+    let parsedChat: any = null;
+    try {
+      const userEntry = pairs.find((p) => p[0] === 'user');
+      if (userEntry && userEntry[1] && userEntry[1] !== 'null') {
+        parsedUser = JSON.parse(userEntry[1]);
+      }
+    } catch (e) {
+      // ignore parse errors
+      parsedUser = null;
+    }
+
+    try {
+      const chatEntry = pairs.find((p) => p[0] === 'chat');
+      if (chatEntry && chatEntry[1] && chatEntry[1] !== 'null') {
+        parsedChat = JSON.parse(chatEntry[1]);
+      }
+    } catch (e) {
+      parsedChat = null;
+    }
+
+    // Determine admin by environment variables (server-side check)
+    const adminIds: string[] = [];
+    if (process.env.MAX_ADMIN_CHAT_ID) adminIds.push(process.env.MAX_ADMIN_CHAT_ID);
+    if (process.env.MAX_ADMIN_USER_ID) adminIds.push(process.env.MAX_ADMIN_USER_ID);
+    if (process.env.TELEGRAM_ADMIN_CHAT_ID) adminIds.push(process.env.TELEGRAM_ADMIN_CHAT_ID);
+    if (process.env.TELEGRAM_ADMIN_USER_ID) adminIds.push(process.env.TELEGRAM_ADMIN_USER_ID);
+    if (process.env.ADMIN_CHAT_ID) adminIds.push(process.env.ADMIN_CHAT_ID);
+
+    const userIdStr = parsedUser && parsedUser.id ? String(parsedUser.id) : null;
+    const isAdmin = !!(valid && userIdStr && adminIds.includes(userIdStr));
+
+    return res.status(200).json({ valid, user: parsedUser, chat: parsedChat, isAdmin });
   } catch (error) {
     console.error('Error validating WebAppData:', error);
     return res.status(500).json({ error: 'Internal server error' });

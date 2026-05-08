@@ -11,7 +11,11 @@ interface HomePageProps {
 export function HomePage({ onNavigate }: HomePageProps) {
   const userData = getTelegramUserData();
   const { webApp } = useTelegramWebApp();
-  const isAdmin = userData?.id === 515650034 || userData?.id === 5216793564;
+
+  // Admin detection: prefer server-validated flag (sessionStorage or global), fallback to hard-coded IDs
+  const sessionIsAdmin = typeof window !== 'undefined' && sessionStorage.getItem('isAdmin') === '1';
+  const globalIsAdmin = typeof window !== 'undefined' && !!(window as any).__IS_ADMIN;
+  const isAdmin = sessionIsAdmin || globalIsAdmin || userData?.id === 515650034 || userData?.id === 5216793564;
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
