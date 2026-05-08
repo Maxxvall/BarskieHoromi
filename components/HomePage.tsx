@@ -79,7 +79,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <p className="text-[14px] text-[#666666] mb-2">Связаться с нами:</p>
         <div className="flex flex-col gap-1">
           <a
-            onClick={() => webApp?.openTelegramLink('tg://user?id=5216793564')}
+            onClick={() => webApp?.openTelegramLink?.('tg://user?id=5216793564')}
             className="text-[16px] text-[#0088cc] cursor-pointer flex items-center gap-2"
           >
             <Send size={16} />

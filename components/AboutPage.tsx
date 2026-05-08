@@ -80,7 +80,7 @@ export function AboutPage({ onBack }: AboutPageProps) {
           <div className="space-y-3">
             {/* Telegram */}
             <a
-              onClick={() => webApp?.openTelegramLink('tg://user?id=5216793564')}
+              onClick={() => webApp?.openTelegramLink?.('tg://user?id=5216793564')}
               className="flex items-center gap-4 p-4 bg-[#0088cc]/10 rounded-lg border border-[#0088cc]/20 hover:bg-[#0088cc]/20 transition-all cursor-pointer"
             >
               <div className="flex items-center justify-center w-12 h-12 bg-[#0088cc] rounded-full text-white">
