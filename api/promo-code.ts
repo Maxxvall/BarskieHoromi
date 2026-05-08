@@ -39,11 +39,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const promoCode = getCurrentPromoCode();
       return res.status(200).json({ promoCode });
     } else if (req.method === 'POST') {
-      // Проверить авторизацию админа
+      // Проверить авторизацию админа — поддерживаем несколько видов ID (MAX/Telegram)
       const userId = req.body?.userId;
-      const ADMIN_ID = process.env.ADMIN_CHAT_ID;
+      const adminIds: string[] = [];
+      if (process.env.MAX_ADMIN_CHAT_ID) adminIds.push(process.env.MAX_ADMIN_CHAT_ID);
+      if (process.env.MAX_ADMIN_USER_ID) adminIds.push(process.env.MAX_ADMIN_USER_ID);
+      if (process.env.TELEGRAM_ADMIN_CHAT_ID) adminIds.push(process.env.TELEGRAM_ADMIN_CHAT_ID);
+      if (process.env.TELEGRAM_ADMIN_USER_ID) adminIds.push(process.env.TELEGRAM_ADMIN_USER_ID);
+      if (process.env.ADMIN_CHAT_ID) adminIds.push(process.env.ADMIN_CHAT_ID);
 
-      if (!userId || userId.toString() !== ADMIN_ID) {
+      if (!userId || !adminIds.includes(userId.toString())) {
         return res.status(403).json({ error: 'Unauthorized' });
       }
 

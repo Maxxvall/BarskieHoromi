@@ -100,14 +100,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Platform: MAX (assumes MAX API base URL in MAX_API_URL env or default)
     if (platform === 'max') {
-      const MAX_API_URL = process.env.MAX_API_URL || 'https://api.max.ru';
+      const MAX_API_URL = process.env.MAX_API_URL || 'https://platform-api.max.ru';
       const maxUrl = `${MAX_API_URL.replace(/\/$/, '')}/messages`;
 
       const response = await fetch(maxUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${BOT_TOKEN}`,
+          Authorization: `${BOT_TOKEN}`,
         },
         body: JSON.stringify({
           chat_id: ADMIN_CHAT_ID,
