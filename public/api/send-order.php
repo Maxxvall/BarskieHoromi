@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // === CONFIGURATION ===
 // Replace with your actual values on the server. Keep token server-side.
-$BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE'; // <-- set this on the server
+$BOT_TOKEN = 'f9LHodD0cOIMSX4DVw_tPfc-aJXaHRHwoB8dUO7g6pRw6EedjmM2HbUeLl09A2AuMemf4qaGjEOnN_88nlVD';
 $ADMIN_USER_ID = 282124260; // your MAX user id
 
 // Read request body
