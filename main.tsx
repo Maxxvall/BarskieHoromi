@@ -3,16 +3,13 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './styles/globals.css';
 
-// Инициализация Telegram Web App
-if ((window as any).Telegram?.WebApp) {
+// Only run Telegram init if we're actually in Telegram (not MAX)
+if ((window as any).Telegram?.WebApp && !(window as any).WebApp) {
   const tg = (window as any).Telegram.WebApp;
-  
-  // Разворачиваем приложение на весь экран
-  tg.expand();
-  
-  // Готовы к показу
-  tg.ready();
-  
+
+  if (typeof tg.expand === 'function') tg.expand();
+  if (typeof tg.ready === 'function') tg.ready();
+
   console.log('Telegram Web App initialized:', {
     version: tg.version,
     platform: tg.platform,
@@ -49,48 +46,44 @@ const hideLoading = () => {
     }
   }
 
-  // Инициализация MAX Web App (если доступен) и синхронная валидация
-  if ((window as any).WebApp) {
-    const mw = (window as any).WebApp;
+  // Detect the correct WebApp object
+  // Prefer MAX's window.WebApp, but verify it's not just the Telegram alias
+  let mw: any = null;
 
+  if ((window as any).WebApp) {
+    mw = (window as any).WebApp;
+  } else if ((window as any).Telegram?.WebApp) {
+    mw = (window as any).Telegram.WebApp;
+  }
+
+  if (mw) {
     if (typeof mw.expand === 'function') mw.expand();
     if (typeof mw.ready === 'function') mw.ready();
 
-    // Быстрая диагностика: покажем небезопасные initData (для отладки только)
-    try {
-      console.log('MAX initDataUnsafe:', mw.initDataUnsafe);
-    } catch (e) {
-      // ignore
-    }
-
-    console.log('MAX Web App initialized:', {
+    console.log('WebApp detected:', {
+      initData: mw.initData,
+      initDataUnsafe: mw.initDataUnsafe,
       version: mw.version,
       platform: mw.platform,
     });
 
+    let adminDetected = false;
+
+    // === Path 1: Try HMAC-validated initData (secure) ===
     try {
-      // Try initData from the bridge first (works for MAX), fall back to URL hash (legacy)
       let webAppData: string | null = null;
 
       if (mw.initData && typeof mw.initData === 'string' && mw.initData.length > 0) {
         webAppData = mw.initData;
       }
 
-      // Fallback: try extracting from URL hash (some platforms may pass it there)
-      const hash = window.location.hash ? window.location.hash.slice(1) : '';
-      if (!webAppData && hash) {
-        const params = new URLSearchParams(hash);
-        webAppData = params.get('WebAppData') || null;
+      if (!webAppData) {
+        const hash = window.location.hash ? window.location.hash.slice(1) : '';
+        if (hash) {
+          const params = new URLSearchParams(hash);
+          webAppData = params.get('WebAppData') || null;
+        }
       }
-
-      // Диагностика — поможет понять, откуда приходят данные
-      console.log('WebAppData debug:', {
-        hashPresent: !!hash,
-        hashWebAppData: hash ? !!new URLSearchParams(hash).get('WebAppData') : false,
-        initData: mw.initData ? (typeof mw.initData === 'string' ? mw.initData.substring(0, 80) + '...' : '[non-string]') : null,
-        initDataUnsafe: mw.initDataUnsafe,
-        webAppDataFound: !!webAppData,
-      });
 
       if (webAppData) {
         const resp = await fetch('/api/validate-init', {
@@ -101,19 +94,42 @@ const hideLoading = () => {
         const json = await resp.json().catch(() => ({}));
         console.log('validate-init result:', json);
 
-        try {
-          (window as any).__MAX_WEBAPP_USER = json.user || null;
-          (window as any).__IS_ADMIN = !!json.isAdmin;
-          if (json.isAdmin) sessionStorage.setItem('isAdmin', '1');
-          else sessionStorage.removeItem('isAdmin');
-        } catch (e) {
-          // ignore
-        }
-      } else {
-        console.warn('No WebAppData available from MAX bridge or URL hash');
+        (window as any).__MAX_WEBAPP_USER = json.user || null;
+        (window as any).__IS_ADMIN = !!json.isAdmin;
+        if (json.isAdmin) sessionStorage.setItem('isAdmin', '1');
+        else sessionStorage.removeItem('isAdmin');
+        adminDetected = true;
       }
     } catch (err) {
       console.error('validate-init error', err);
+    }
+
+    // === Path 2: Fallback — use initDataUnsafe.user.id + /api/check-admin ===
+    if (!adminDetected) {
+      console.warn('initData is empty, trying fallback via initDataUnsafe...');
+      try {
+        const unsafeUser = mw.initDataUnsafe?.user;
+        if (unsafeUser && unsafeUser.id) {
+          console.log('Found user from initDataUnsafe:', unsafeUser);
+          (window as any).__MAX_WEBAPP_USER = unsafeUser;
+
+          const resp = await fetch('/api/check-admin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: String(unsafeUser.id) }),
+          });
+          const json = await resp.json().catch(() => ({}));
+          console.log('check-admin result:', json);
+
+          (window as any).__IS_ADMIN = !!json.isAdmin;
+          if (json.isAdmin) sessionStorage.setItem('isAdmin', '1');
+          else sessionStorage.removeItem('isAdmin');
+        } else {
+          console.warn('No user data available from initDataUnsafe either');
+        }
+      } catch (err) {
+        console.error('check-admin fallback error', err);
+      }
     }
 
     console.log('Admin status after validation:', {
@@ -121,6 +137,8 @@ const hideLoading = () => {
       sessionIsAdmin: sessionStorage.getItem('isAdmin'),
       user: (window as any).__MAX_WEBAPP_USER,
     });
+  } else {
+    console.warn('No WebApp object found (neither MAX nor Telegram)');
   }
 
   // Render AFTER validation is complete

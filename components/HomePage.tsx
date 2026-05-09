@@ -19,6 +19,16 @@ export function HomePage({ onNavigate }: HomePageProps) {
     <div className="flex flex-col min-h-screen bg-white">
       {/* Header */}
       <div className="bg-[#0088cc] text-white px-6 py-8">
+        {/* Temporary debug — remove after fixing */}
+        <div style={{ padding: '8px', background: '#111', color: '#0f0', fontSize: '11px', fontFamily: 'monospace' }}>
+          user: {JSON.stringify((window as any).__MAX_WEBAPP_USER?.id || 'none')}
+          <br />
+          isAdmin: {String(isAdmin)}
+          <br />
+          initData: {String(!!(window as any).WebApp?.initData)}
+          <br />
+          initDataUnsafe: {JSON.stringify((window as any).WebApp?.initDataUnsafe?.user?.id || 'none')}
+        </div>
         <h1 className="text-[20px] font-semibold mb-2">Гостевой дом</h1>
         <p className="text-[14px] opacity-90">Добро пожаловать!</p>
       </div>
