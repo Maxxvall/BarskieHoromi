@@ -63,8 +63,6 @@ interface Window {
 
     interface ImportMetaEnv {
       readonly VITE_SECRET_CODE: string;
-      readonly VITE_BOT_TOKEN: string;
-      readonly VITE_ADMIN_USER_ID: string;
     }
 
     interface ImportMeta {

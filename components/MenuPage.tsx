@@ -100,41 +100,31 @@ export function MenuPage({ onBack }: MenuPageProps) {
 
     const messageText = `**Новый заказ!**\n\n**${mealText}** на **${dateText}**\n\n${itemsList}\n\n**Итого: ${totalPrice} ₽**`;
 
-    const botToken = import.meta.env.VITE_BOT_TOKEN;
-    const adminUserId = import.meta.env.VITE_ADMIN_USER_ID;
+    try {
+      const response = await fetch('/api/send-order.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: messageText }),
+      });
 
-    if (botToken && adminUserId) {
-      try {
-        const response = await fetch('https://platform-api.max.ru/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': botToken,
-          },
-          body: JSON.stringify({
-            userId: Number(adminUserId),
-            text: messageText,
-            format: 'markdown',
-          }),
+      if (response.ok) {
+        toast.success('Заказ отправлен!', {
+          description: `${mealText} на ${dateText}, ${totalPrice} ₽`,
+          duration: 4000,
         });
-
-        if (response.ok) {
-          toast.success('Заказ отправлен!', {
-            description: `${mealText} на ${dateText}, ${totalPrice} ₽`,
-            duration: 4000,
-          });
-          setCart([]);
-          return;
-        } else {
-          const errorData = await response.json().catch(() => ({}));
-          console.error('MAX API error:', response.status, errorData);
-        }
-      } catch (error) {
-        console.error('Failed to send order via MAX API:', error);
+        setCart([]);
+        return;
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Send order error:', response.status, errorData);
       }
+    } catch (error) {
+      console.error('Failed to send order:', error);
     }
 
-    // Fallback if API call fails or env vars not set
+    // Fallback if request fails
     toast.error('Не удалось отправить заказ. Сообщите о заказе хозяевам лично.', {
       duration: 5000,
     });
