@@ -101,7 +101,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
     const messageText = `**Новый заказ!**\n\n**${mealText}** на **${dateText}**\n\n${itemsList}\n\n**Итого: ${totalPrice} ₽**`;
 
     try {
-      const response = await fetch('/api/send-order.php', {
+      const response = await fetch('/api/send-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
