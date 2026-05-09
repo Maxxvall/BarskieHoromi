@@ -1,4 +1,4 @@
-import { MapPin, UtensilsCrossed, ShoppingBag, Info, Shield, Send, Phone } from 'lucide-react';
+import { MapPin, UtensilsCrossed, ShoppingBag, Info, Send, Phone } from 'lucide-react';
 import { Page } from '../App';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { useTelegramWebApp } from '../lib/telegram';
@@ -10,11 +10,6 @@ interface HomePageProps {
 export function HomePage({ onNavigate }: HomePageProps) {
   const { webApp } = useTelegramWebApp();
 
-  // Admin detection: prefer server-validated flag (sessionStorage or global)
-  const sessionIsAdmin = typeof window !== 'undefined' && sessionStorage.getItem('isAdmin') === '1';
-  const globalIsAdmin = typeof window !== 'undefined' && !!(window as any).__IS_ADMIN;
-  const isAdmin = sessionIsAdmin || globalIsAdmin;
-
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* Header */}
@@ -22,8 +17,6 @@ export function HomePage({ onNavigate }: HomePageProps) {
         {/* Temporary debug — remove after fixing */}
         <div style={{ padding: '8px', background: '#111', color: '#0f0', fontSize: '11px', fontFamily: 'monospace' }}>
           user: {JSON.stringify((window as any).__MAX_WEBAPP_USER?.id || 'none')}
-          <br />
-          isAdmin: {String(isAdmin)}
           <br />
           initData: {String(!!(window as any).WebApp?.initData)}
           <br />
@@ -64,15 +57,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             onClick={() => onNavigate('about')}
             delay={0.3}
           />
-          {isAdmin && (
-            <NavigationButton
-              icon={<Shield size={32} />}
-              title="Админ панель"
-              description="Управление контентом"
-              onClick={() => onNavigate('admin')}
-              delay={0.4}
-            />
-          )}
+          
         </div>
       </div>
 

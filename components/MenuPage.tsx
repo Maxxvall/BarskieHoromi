@@ -5,7 +5,6 @@ import { toast } from 'sonner';
 // Tabs (Radix) replaced with simple buttons in this page to ensure consistent styling across builds
 // import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { Button } from './ui/button';
-import { sendOrderToTelegram, getTelegramUserData, formatUserName } from '../lib/telegram-api';
 
 interface MenuPageProps {
   onBack: () => void;
@@ -85,7 +84,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const handleSubmitOrder = async () => {
+  const handleSubmitOrder = () => {
     if (cart.length === 0) {
       toast.error('Выберите хотя бы одно блюдо');
       return;
@@ -94,44 +93,33 @@ export function MenuPage({ onBack }: MenuPageProps) {
     const dateText = orderDate === 'tomorrow' ? 'завтра' : 'послезавтра';
     const mealText = mealType === 'breakfast' ? 'Завтрак' : 'Ужин';
 
-    // Показываем индикатор загрузки
-    const loadingToast = toast.loading('Отправляем заказ...');
+    // Format order data
+    const orderData = {
+      type: 'order',
+      mealType,
+      orderDate,
+      items: cart.map((item) => ({ name: item.name, quantity: item.quantity, price: item.price })),
+      totalPrice,
+    };
 
-    try {
-      // Получаем данные пользователя из Telegram
-      const userData = getTelegramUserData();
-      const userName = formatUserName(userData);
-
-      // Отправляем заказ в Telegram
-      const success = await sendOrderToTelegram({
-        items: cart,
-        totalPrice,
-        mealType,
-        orderDate,
-        userName,
-        userId: userData?.id,
-      });
-
-      if (success) {
-        toast.success(`Заказ на ${dateText} отправлен администратору!`, {
-          description: `${mealText} на сумму ${totalPrice} ₽`,
-          id: loadingToast,
-        });
-
-        // Очищаем корзину
-        setCart([]);
-      } else {
-        toast.error('Не удалось отправить заказ', {
-          description: 'Попробуйте еще раз',
-          id: loadingToast,
-        });
+    // Try to send via WebApp.sendData (works in MAX and Telegram)
+    const webApp = (window as any).WebApp || (window as any).Telegram?.WebApp;
+    if (webApp && typeof webApp.sendData === 'function') {
+      try {
+        webApp.sendData(JSON.stringify(orderData));
+        // Note: sendData() closes the mini-app after sending
+        return;
+      } catch (e) {
+        console.error('sendData failed:', e);
       }
-    } catch (error) {
-      console.error('Error submitting order:', error);
-      toast.error('Произошла ошибка при отправке заказа', {
-        id: loadingToast,
-      });
     }
+
+    // Fallback: show success message with instructions
+    toast.success(`Заказ: ${mealText} на ${dateText}, ${totalPrice} ₽`, {
+      description: 'Сообщите о заказе хозяевам дома',
+      duration: 5000,
+    });
+    setCart([]);
   };
 
   return (

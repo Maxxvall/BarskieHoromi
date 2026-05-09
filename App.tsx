@@ -6,10 +6,9 @@ import { MenuPage } from './components/MenuPage';
 import { ShopPage } from './components/ShopPage';
 import { AlcoholPage } from './components/AlcoholPage';
 import { AboutPage } from './components/AboutPage';
-import { AdminPage } from './components/AdminPage';
 import { useTelegramWebApp, useBackButton, useHapticFeedback } from './lib/telegram';
 
-export type Page = 'home' | 'attractions' | 'menu' | 'shop' | 'alcohol' | 'about' | 'admin';
+export type Page = 'home' | 'attractions' | 'menu' | 'shop' | 'alcohol' | 'about';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -72,7 +71,6 @@ export default function App() {
         {currentPage === 'shop' && <ShopPage onNavigate={navigateTo} onBack={navigateBack} />}
         {currentPage === 'alcohol' && <AlcoholPage onBack={() => setCurrentPage('shop')} />}
         {currentPage === 'about' && <AboutPage onBack={navigateBack} />}
-        {currentPage === 'admin' && <AdminPage onBack={navigateBack} />}
       </div>
       <Toaster position="bottom-center" />
       {/* Temporarily disable Vercel speed/analytics scripts to avoid 404s during deploy */}

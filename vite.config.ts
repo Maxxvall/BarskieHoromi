@@ -23,7 +23,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          telegram: ['@twa-dev/sdk'],
         },
         // Стабильные имена файлов для лучшего кэширования
         assetFileNames: (assetInfo) => {

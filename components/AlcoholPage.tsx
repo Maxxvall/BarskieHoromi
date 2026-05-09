@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Header } from './Header';
 import { Lock, AlertCircle } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
@@ -11,43 +11,9 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
   const [promoCode, setPromoCode] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [error, setError] = useState('');
-  const [validCode, setValidCode] = useState<string>('');
 
-  // Загрузка текущего промокода
-  useEffect(() => {
-    const loadPromoCode = async () => {
-      try {
-        const response = await fetch('/api/promo-code');
-        const data = await response.json();
-        setValidCode(data.promoCode);
-      } catch (error) {
-        console.error('Error loading promo code:', error);
-        setError('Ошибка загрузки промокода');
-      }
-    };
-
-    loadPromoCode();
-  }, []);
-
-  // Generate current month code (fallback)
-  const getCurrentMonthCode = () => {
-    const months = [
-      'JAN',
-      'FEB',
-      'MAR',
-      'APR',
-      'MAY',
-      'JUN',
-      'JUL',
-      'AUG',
-      'SEP',
-      'OCT',
-      'NOV',
-      'DEC',
-    ];
-    const now = new Date();
-    return `${months[now.getMonth()]}${now.getFullYear()}`;
-  };
+  // Secret code from build-time env variable, default "ХОРОМЫ"
+  const SECRET_CODE = import.meta.env.VITE_SECRET_CODE || 'ХОРОМЫ';
 
   const alcoholItems = [
     {
@@ -84,10 +50,8 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
     e.preventDefault();
     setError('');
 
-    // Используем загруженный промокод или fallback
-    const codeToCheck = validCode || getCurrentMonthCode();
-
-    if (promoCode.toUpperCase() === codeToCheck) {
+    setError('');
+    if (promoCode.toUpperCase() === SECRET_CODE.toUpperCase()) {
       setIsUnlocked(true);
     } else {
       setError('Промокод недействителен. Спросите код у администратора.');

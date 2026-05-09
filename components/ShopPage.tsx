@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Header } from './Header';
 import { Lock } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
@@ -10,24 +9,6 @@ interface ShopPageProps {
 }
 
 export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
-  const [isSecretSectionVisible, setIsSecretSectionVisible] = useState<boolean>(true);
-
-  // Загрузка состояния видимости секретного раздела
-  useEffect(() => {
-    const loadSecretSectionVisibility = async () => {
-      try {
-        const response = await fetch('/api/secret-section-visibility');
-        const data = await response.json();
-        setIsSecretSectionVisible(data.isVisible);
-      } catch (error) {
-        console.error('Error loading secret section visibility:', error);
-        // В случае ошибки показываем раздел по умолчанию
-        setIsSecretSectionVisible(true);
-      }
-    };
-
-    loadSecretSectionVisibility();
-  }, []);
   const souvenirs = [
     {
       id: 's1',
@@ -72,30 +53,28 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
       <Header title="Магазин" onBack={onBack} />
 
       <div className="px-4 py-6">
-        {/* Alcohol Promo Section (moved above souvenirs) */}
-        {isSecretSectionVisible && (
-          <div className="mb-8">
-            <div className="bg-gradient-to-r from-[#0088cc]/10 to-[#52a547]/10 rounded-lg p-6 border border-[#0088cc]/20">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 bg-[#0088cc]/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Lock size={24} className="text-[#0088cc]" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-[16px] font-semibold mb-2 text-[#000000]">
-                    Секретный раздел
-                  </h3>
-                  {/* Description removed as requested */}
-                </div>
+        {/* Alcohol Promo Section (always visible) */}
+        <div className="mb-8">
+          <div className="bg-gradient-to-r from-[#0088cc]/10 to-[#52a547]/10 rounded-lg p-6 border border-[#0088cc]/20">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-12 h-12 bg-[#0088cc]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <Lock size={24} className="text-[#0088cc]" />
               </div>
-              <button
-                onClick={() => onNavigate('alcohol')}
-                className="w-full py-3 bg-[#0088cc] text-white rounded-lg font-semibold hover:bg-[#0077b3] transition-all"
-              >
-                Показать
-              </button>
+              <div className="flex-1">
+                <h3 className="text-[16px] font-semibold mb-2 text-[#000000]">
+                  Секретный раздел
+                </h3>
+                {/* Description removed as requested */}
+              </div>
             </div>
+            <button
+              onClick={() => onNavigate('alcohol')}
+              className="w-full py-3 bg-[#0088cc] text-white rounded-lg font-semibold hover:bg-[#0077b3] transition-all"
+            >
+              Показать
+            </button>
           </div>
-        )}
+        </div>
 
         {/* Souvenirs Section */}
         <div className="mb-8">

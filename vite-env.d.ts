@@ -60,3 +60,11 @@ interface Window {
     };
   };
 }
+
+    interface ImportMetaEnv {
+      readonly VITE_SECRET_CODE: string;
+    }
+
+    interface ImportMeta {
+      readonly env: ImportMetaEnv;
+    }
