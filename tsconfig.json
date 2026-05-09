@@ -26,7 +26,7 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["main.tsx", "App.tsx", "components/**/*", "lib/**/*", "styles/**/*"],
+  "include": ["main.tsx", "App.tsx", "components/**/*", "lib/**/*", "styles/**/*", "vite-env.d.ts"],
   "exclude": ["node_modules", "dist"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
