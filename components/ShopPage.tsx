@@ -14,37 +14,37 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
       id: 's1',
       name: 'Магнит с видом гор',
       price: 150,
-      image: '/photo/Магнитик2.png',
+      image: '/photo/magnitik2.png',
     },
     {
       id: 's2',
       name: 'Деревянная ложка',
       price: 350,
-      image: '/photo/Деревяная ложка.png',
+      image: '/photo/lozhka.png',
     },
     {
       id: 's3',
       name: 'Керамическая кружка',
       price: 450,
-      image: '/photo/Кружка.png',
+      image: '/photo/kruzhka.png',
     },
     {
       id: 's4',
       name: 'Магнит с видом',
       price: 150,
-      image: '/photo/магнитик.png',
+      image: '/photo/magnitik.png',
     },
     {
       id: 's5',
       name: 'Часы настенные',
       price: 1200,
-      image: '/photo/Часы.png',
+      image: '/photo/chasy.png',
     },
     {
       id: 's6',
       name: 'Текстильный платок',
       price: 600,
-      image: '/photo/Текстильный платок.png',
+      image: '/photo/platok.png',
     },
   ];
 

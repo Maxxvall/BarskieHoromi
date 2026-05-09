@@ -84,7 +84,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const handleSubmitOrder = () => {
+  const handleSubmitOrder = async () => {
     if (cart.length === 0) {
       toast.error('Выберите хотя бы одно блюдо');
       return;
@@ -93,33 +93,51 @@ export function MenuPage({ onBack }: MenuPageProps) {
     const dateText = orderDate === 'tomorrow' ? 'завтра' : 'послезавтра';
     const mealText = mealType === 'breakfast' ? 'Завтрак' : 'Ужин';
 
-    // Format order data
-    const orderData = {
-      type: 'order',
-      mealType,
-      orderDate,
-      items: cart.map((item) => ({ name: item.name, quantity: item.quantity, price: item.price })),
-      totalPrice,
-    };
+    // Format order text for MAX message
+    const itemsList = cart
+      .map((item) => `- ${item.name} x${item.quantity} — ${item.price * item.quantity} ₽`)
+      .join('\n');
 
-    // Try to send via WebApp.sendData (works in MAX and Telegram)
-    const webApp = (window as any).WebApp || (window as any).Telegram?.WebApp;
-    if (webApp && typeof webApp.sendData === 'function') {
+    const messageText = `**Новый заказ!**\n\n**${mealText}** на **${dateText}**\n\n${itemsList}\n\n**Итого: ${totalPrice} ₽**`;
+
+    const botToken = import.meta.env.VITE_BOT_TOKEN;
+    const adminUserId = import.meta.env.VITE_ADMIN_USER_ID;
+
+    if (botToken && adminUserId) {
       try {
-        webApp.sendData(JSON.stringify(orderData));
-        // Note: sendData() closes the mini-app after sending
-        return;
-      } catch (e) {
-        console.error('sendData failed:', e);
+        const response = await fetch('https://platform-api.max.ru/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': botToken,
+          },
+          body: JSON.stringify({
+            userId: Number(adminUserId),
+            text: messageText,
+            format: 'markdown',
+          }),
+        });
+
+        if (response.ok) {
+          toast.success('Заказ отправлен!', {
+            description: `${mealText} на ${dateText}, ${totalPrice} ₽`,
+            duration: 4000,
+          });
+          setCart([]);
+          return;
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          console.error('MAX API error:', response.status, errorData);
+        }
+      } catch (error) {
+        console.error('Failed to send order via MAX API:', error);
       }
     }
 
-    // Fallback: show success message with instructions
-    toast.success(`Заказ: ${mealText} на ${dateText}, ${totalPrice} ₽`, {
-      description: 'Сообщите о заказе хозяевам дома',
+    // Fallback if API call fails or env vars not set
+    toast.error('Не удалось отправить заказ. Сообщите о заказе хозяевам лично.', {
       duration: 5000,
     });
-    setCart([]);
   };
 
   return (
@@ -229,9 +247,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
                 <span className="text-[14px] text-[#666666]">Итого:</span>
                 <span className="text-[20px] font-semibold text-[#000000]">{totalPrice} ₽</span>
               </div>
-              <p className="text-[14px] text-[#666666]">
-                {cart.reduce((sum, item) => sum + item.quantity, 0)} позиций
-              </p>
+              <p className="text-[14px] text-[#666666]">{cart.reduce((sum, item) => sum + item.quantity, 0)} позиций</p>
             </div>
             <Button
               onClick={handleSubmitOrder}

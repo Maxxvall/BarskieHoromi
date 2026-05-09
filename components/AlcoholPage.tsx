@@ -21,28 +21,28 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
       name: 'Самогон на бруснике',
       price: 800,
       volume: '500 мл',
-      image: '/photo/alco/Брусника.png',
+      image: '/photo/alco/brusnika.png',
     },
     {
       id: 'a2',
       name: 'Самогон на вишне',
       price: 800,
       volume: '500 мл',
-      image: '/photo/alco/Вишя.png',
+      image: '/photo/alco/vishnya.png',
     },
     {
       id: 'a3',
       name: 'Самогон на дубе',
       price: 800,
       volume: '500 мл',
-      image: '/photo/alco/Самогон Дуб.png',
+      image: '/photo/alco/samogon-dub.png',
     },
     {
       id: 'a4',
       name: 'Самогон на смородине',
       price: 800,
       volume: '500 мл',
-      image: '/photo/alco/Смородина.png',
+      image: '/photo/alco/smorodina.png',
     },
   ];
 
