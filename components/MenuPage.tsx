@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Header } from './Header';
 import { Plus, Minus, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
+import { openLink } from '../lib/telegram';
 // Tabs (Radix) replaced with simple buttons in this page to ensure consistent styling across builds
 // import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { Button } from './ui/button';
@@ -101,33 +102,21 @@ export function MenuPage({ onBack }: MenuPageProps) {
     const messageText = `**Новый заказ!**\n\n**${mealText}** на **${dateText}**\n\n${itemsList}\n\n**Итого: ${totalPrice} ₽**`;
 
     try {
-      const response = await fetch('/api/send-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: messageText }),
+      const encoded = encodeURIComponent(messageText);
+      const maxUrl = `https://max.ru/write/282124260?text=${encoded}`;
+      openLink(maxUrl);
+      toast.success('Открыт чат MAX для подтверждения заказа', {
+        description: `${mealText} на ${dateText}, ${totalPrice} ₽`,
+        duration: 4000,
       });
-
-      if (response.ok) {
-        toast.success('Заказ отправлен!', {
-          description: `${mealText} на ${dateText}, ${totalPrice} ₽`,
-          duration: 4000,
-        });
-        setCart([]);
-        return;
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Send order error:', response.status, errorData);
-      }
+      setCart([]);
+      return;
     } catch (error) {
-      console.error('Failed to send order:', error);
+      console.error('Failed to open MAX link:', error);
+      toast.error('Не удалось открыть MAX. Сообщите о заказе хозяевам лично.', {
+        duration: 5000,
+      });
     }
-
-    // Fallback if request fails
-    toast.error('Не удалось отправить заказ. Сообщите о заказе хозяевам лично.', {
-      duration: 5000,
-    });
   };
 
   return (
