@@ -1,14 +1,13 @@
 import { MapPin, UtensilsCrossed, ShoppingBag, Info, Send, Phone } from 'lucide-react';
 import { Page } from '../App';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { useTelegramWebApp } from '../lib/telegram';
+import { openMaxLink } from '../lib/telegram';
 
 interface HomePageProps {
   onNavigate: (page: Page) => void;
 }
 
 export function HomePage({ onNavigate }: HomePageProps) {
-  const { webApp } = useTelegramWebApp();
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -68,7 +67,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <p className="text-[14px] text-[#666666] mb-2">Связаться с нами:</p>
         <div className="flex flex-col gap-1">
           <a
-            onClick={() => webApp?.openLink?.('https://max.ru/u/282124260')}
+            onClick={() => openMaxLink('https://max.ru/u/f9LHodD0cOJH6JAxWsOYgGjhnHlUDsUHkQLW0MSBnr5eJ5vVTHDXVMreZ1M')}
             className="text-[16px] text-[#0088cc] cursor-pointer flex items-center gap-2"
           >
             <Send size={16} />

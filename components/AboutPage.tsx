@@ -1,14 +1,13 @@
 import { Header } from './Header';
 import { Phone, Send } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { useTelegramWebApp } from '../lib/telegram';
+import { openMaxLink } from '../lib/telegram';
 
 interface AboutPageProps {
   onBack: () => void;
 }
 
 export function AboutPage({ onBack }: AboutPageProps) {
-  const { webApp } = useTelegramWebApp();
   const photos = [
     {
       url: '/onas/2.jpg',
@@ -80,7 +79,7 @@ export function AboutPage({ onBack }: AboutPageProps) {
           <div className="space-y-3">
             {/* Telegram */}
             <a
-              onClick={() => webApp?.openLink?.('https://max.ru/u/282124260')}
+              onClick={() => openMaxLink('https://max.ru/u/f9LHodD0cOJH6JAxWsOYgGjhnHlUDsUHkQLW0MSBnr5eJ5vVTHDXVMreZ1M')}
               className="flex items-center gap-4 p-4 bg-[#0088cc]/10 rounded-lg border border-[#0088cc]/20 hover:bg-[#0088cc]/20 transition-all cursor-pointer"
             >
               <div className="flex items-center justify-center w-12 h-12 bg-[#0088cc] rounded-full text-white">

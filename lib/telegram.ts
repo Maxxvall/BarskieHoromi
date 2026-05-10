@@ -31,6 +31,7 @@ export interface TelegramWebApp {
   showAlert(message: string, callback?: () => void): void;
   showConfirm(message: string, callback?: (confirmed: boolean) => void): void;
   openLink(url: string, options?: { try_instant_view?: boolean }): void;
+  openMaxLink?: (url: string, options?: any) => void;
   openTelegramLink?(url: string): void;
   sendData(data: string): void;
 }
@@ -238,6 +239,54 @@ export const openLink = (url: string, tryInstantView = false) => {
   } else {
     window.open(url, '_blank');
   }
+};
+
+/**
+ * Открыть ссылку через MAX SDK если доступно (openMaxLink), иначе fallback на openLink/window
+ */
+export const openMaxLink = (url: string, tryInstantView = false) => {
+  const webApp = getTelegramWebApp();
+  if (webApp) {
+    const anyApp = webApp as any;
+    if (typeof anyApp.openMaxLink === 'function') {
+      try {
+        anyApp.openMaxLink(url);
+        return;
+      } catch (e) {
+        console.error('openMaxLink failed, falling back to openLink', e);
+      }
+    }
+
+    if (typeof webApp.openLink === 'function') {
+      webApp.openLink(url, { try_instant_view: tryInstantView });
+      return;
+    }
+  }
+
+  window.open(url, '_blank');
+};
+
+/**
+ * Открыть окно написания сообщения в MAX с предзаполненным текстом.
+ * Принимает числовой id, путь типа "u/<token>" или полный URL.
+ */
+export const openMaxWrite = (userIdOrPath: string | number, messageText: string) => {
+  const encoded = encodeURIComponent(messageText);
+  const asStr = String(userIdOrPath);
+
+  let url = '';
+  if (/^https?:\/\//.test(asStr)) {
+    url = asStr;
+  } else if (/^\/?u\//.test(asStr) || /^u\//.test(asStr)) {
+    const token = asStr.replace(/^\/?/, '');
+    // preserve token-style profile URL; many MAX links use /u/<token>
+    url = `https://max.ru/${token}?text=${encoded}`;
+  } else {
+    // numeric user id -> write endpoint
+    url = `https://max.ru/write/${asStr}?text=${encoded}`;
+  }
+
+  openMaxLink(url);
 };
 
 /**

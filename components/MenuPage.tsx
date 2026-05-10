@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Header } from './Header';
 import { Plus, Minus, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
-import { openLink } from '../lib/telegram';
+import { openMaxWrite } from '../lib/telegram';
 // Tabs (Radix) replaced with simple buttons in this page to ensure consistent styling across builds
 // import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { Button } from './ui/button';
@@ -102,9 +102,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
     const messageText = `**Новый заказ!**\n\n**${mealText}** на **${dateText}**\n\n${itemsList}\n\n**Итого: ${totalPrice} ₽**`;
 
     try {
-      const encoded = encodeURIComponent(messageText);
-      const maxUrl = `https://max.ru/write/282124260?text=${encoded}`;
-      openLink(maxUrl);
+      openMaxWrite(282124260, messageText);
       toast.success('Открыт чат MAX для подтверждения заказа', {
         description: `${mealText} на ${dateText}, ${totalPrice} ₽`,
         duration: 4000,
