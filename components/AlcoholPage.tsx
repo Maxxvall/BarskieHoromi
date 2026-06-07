@@ -171,7 +171,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
         {/* Info Text */}
         <div className="mt-4 p-4 bg-[#f5f5f5] rounded-lg">
           <p className="text-[14px] text-[#666666] text-center">
-            Все товары можно приобрести при выезде на ресепшене
+            Все товары можно приобрести обратившись к хозяину дома
           </p>
         </div>
       </div>
