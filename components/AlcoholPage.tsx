@@ -3,6 +3,9 @@ import { Header } from './Header';
 import { Lock, AlertCircle } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
+// v=2 — обновлено 2026-06-07, сброс кэша браузера
+const CACHE_BUST = 'v=2';
+
 interface AlcoholPageProps {
   onBack: () => void;
 }
@@ -21,28 +24,28 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
       name: 'Самогон на бруснике',
       price: 800,
       volume: '500 мл',
-      image: '/photo/alco/brusnika.png',
+      image: `/photo/alco/brusnika.png?${CACHE_BUST}`,
     },
     {
       id: 'a2',
       name: 'Самогон на вишне',
       price: 800,
       volume: '500 мл',
-      image: '/photo/alco/vishnya.png',
+      image: `/photo/alco/vishnya.png?${CACHE_BUST}`,
     },
     {
       id: 'a3',
       name: 'Самогон на дубе',
       price: 800,
       volume: '500 мл',
-      image: '/photo/alco/samogon-dub.png',
+      image: `/photo/alco/samogon-dub.png?${CACHE_BUST}`,
     },
     {
       id: 'a4',
       name: 'Самогон на смородине',
       price: 800,
       volume: '500 мл',
-      image: '/photo/alco/smorodina.png',
+      image: `/photo/alco/smorodina.png?${CACHE_BUST}`,
     },
   ];
 

@@ -15,13 +15,13 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
   const souvenirs = [
     {
       id: 's1',
-      name: 'Магнит с видом гор',
+      name: 'Магнит с пейзажем Карелии',
       price: 150,
       image: `/photo/magnitik2.png?${CACHE_BUST}`,
     },
     {
       id: 's2',
-      name: 'Магнит с видом',
+      name: 'Магнит',
       price: 150,
       image: `/photo/magnitik.png?${CACHE_BUST}`,
     },
@@ -33,7 +33,7 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
     },
     {
       id: 's4',
-      name: 'Текстильный платок',
+      name: 'Картина',
       price: 600,
       image: `/photo/platok.png?${CACHE_BUST}`,
     },
