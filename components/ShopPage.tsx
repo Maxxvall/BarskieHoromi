@@ -18,30 +18,18 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
     },
     {
       id: 's2',
-      name: 'Деревянная ложка',
-      price: 350,
-      image: '/photo/lozhka.png',
-    },
-    {
-      id: 's3',
-      name: 'Керамическая кружка',
-      price: 450,
-      image: '/photo/kruzhka.png',
-    },
-    {
-      id: 's4',
       name: 'Магнит с видом',
       price: 150,
       image: '/photo/magnitik.png',
     },
     {
-      id: 's5',
-      name: 'Часы настенные',
+      id: 's3',
+      name: 'Часы на фанере',
       price: 1200,
       image: '/photo/chasy.png',
     },
     {
-      id: 's6',
+      id: 's4',
       name: 'Текстильный платок',
       price: 600,
       image: '/photo/platok.png',

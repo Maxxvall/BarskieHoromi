@@ -1,5 +1,6 @@
+import { useState, useCallback } from 'react';
 import { Header } from './Header';
-import { Phone, Send } from 'lucide-react';
+import { Phone, Send, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { openMaxLink } from '../lib/telegram';
 
@@ -7,34 +8,122 @@ interface AboutPageProps {
   onBack: () => void;
 }
 
+const photos = [
+  { url: '/onas/2.jpg', alt: 'Внешний вид гостевого дома' },
+  { url: '/onas/orig.jpeg', alt: 'Гостевой дом «Барские Хоромы»' },
+  { url: '/onas/i.webp', alt: 'Интерьер гостевого дома' },
+];
+
 export function AboutPage({ onBack }: AboutPageProps) {
-  const photos = [
-    {
-      url: '/onas/2.jpg',
-      alt: 'Внешний вид гостевого дома',
-    },
-  ];
+  const [currentPhoto, setCurrentPhoto] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchDelta, setTouchDelta] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
+
+  const goNext = useCallback(() => {
+    setCurrentPhoto((p) => (p + 1) % photos.length);
+  }, []);
+
+  const goPrev = useCallback(() => {
+    setCurrentPhoto((p) => (p - 1 + photos.length) % photos.length);
+  }, []);
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+    setTouchDelta(0);
+    setIsSwiping(true);
+  }, []);
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const delta = e.touches[0].clientX - touchStart;
+    setTouchDelta(delta);
+  }, [touchStart]);
+
+  const onTouchEnd = useCallback(() => {
+    if (Math.abs(touchDelta) > 50) {
+      if (touchDelta < 0) goNext();
+      else goPrev();
+    }
+    setTouchStart(null);
+    setTouchDelta(0);
+    setIsSwiping(false);
+  }, [touchDelta, goNext, goPrev]);
 
   return (
     <div className="min-h-screen bg-white overflow-y-auto">
       <Header title="О нас" onBack={onBack} />
 
       <div className="px-4 py-6">
-        {/* Photo Gallery */}
+        {/* Photo Carousel */}
         <div className="mb-8">
-          <div className="grid grid-cols-1 gap-4">
-            {photos.map((photo, index) => (
-              <div
-                key={index}
-                className="relative aspect-video rounded-lg overflow-hidden bg-[#f5f5f5] shadow-sm"
-              >
-                <ImageWithFallback
-                  src={photo.url}
-                  alt={photo.alt}
-                  className="w-full h-full object-cover"
-                />
+          <div
+            className="relative aspect-video rounded-lg overflow-hidden bg-[#f5f5f5] shadow-sm select-none"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            {/* Only render current + adjacent images for lazy loading */}
+            <div className="w-full h-full">
+              {photos.map((photo, index) => {
+                // Only render current and adjacent photos to avoid unnecessary network requests
+                if (Math.abs(index - currentPhoto) > 1) return null;
+                const offset = index - currentPhoto;
+                return (
+                  <div
+                    key={index}
+                    className="absolute inset-0 transition-transform duration-300 ease-out"
+                    style={{
+                      transform: `translateX(calc(${offset * 100}% + ${isSwiping && index === currentPhoto ? touchDelta : 0}px))`,
+                    }}
+                  >
+                    <ImageWithFallback
+                      src={photo.url}
+                      alt={photo.alt}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Navigation Arrows */}
+            {photos.length > 1 && (
+              <>
+                <button
+                  onClick={goPrev}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center text-white transition-colors z-10"
+                  aria-label="Предыдущее фото"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  onClick={goNext}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center text-white transition-colors z-10"
+                  aria-label="Следующее фото"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </>
+            )}
+
+            {/* Dots */}
+            {photos.length > 1 && (
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {photos.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentPhoto(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === currentPhoto
+                        ? 'bg-white w-5'
+                        : 'bg-white/50 hover:bg-white/80'
+                    }`}
+                    aria-label={`Фото ${index + 1}`}
+                  />
+                ))}
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -79,7 +168,7 @@ export function AboutPage({ onBack }: AboutPageProps) {
           <div className="space-y-3">
             {/* Telegram */}
             <a
-              onClick={() => openMaxLink('https://max.ru/u/f9LHodD0cOJH6JAxWsOYgGjhnHlUDsUHkQLW0MSBnr5eJ5vVTHDXVMreZ1M')}
+              onClick={() => openMaxLink('https://max.ru/u/f9LHodD0cOJOIUAy2QVWz08FsV6DwdlAwoEzUBR6_SoDYBpWxI8kkp76YeQ')}
               className="flex items-center gap-4 p-4 bg-[#0088cc]/10 rounded-lg border border-[#0088cc]/20 hover:bg-[#0088cc]/20 transition-all cursor-pointer"
             >
               <div className="flex items-center justify-center w-12 h-12 bg-[#0088cc] rounded-full text-white">

@@ -67,7 +67,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <p className="text-[14px] text-[#666666] mb-2">Связаться с нами:</p>
         <div className="flex flex-col gap-1">
           <a
-            onClick={() => openMaxLink('https://max.ru/u/f9LHodD0cOJH6JAxWsOYgGjhnHlUDsUHkQLW0MSBnr5eJ5vVTHDXVMreZ1M')}
+            onClick={() => openMaxLink('https://max.ru/u/f9LHodD0cOJOIUAy2QVWz08FsV6DwdlAwoEzUBR6_SoDYBpWxI8kkp76YeQ')}
             className="text-[16px] text-[#0088cc] cursor-pointer flex items-center gap-2"
           >
             <Send size={16} />
