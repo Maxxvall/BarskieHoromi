@@ -3,6 +3,9 @@ import { Lock } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { Page } from '../App';
 
+// v=2 — обновлено 2026-06-07, сброс кэша браузера
+const CACHE_BUST = 'v=2';
+
 interface ShopPageProps {
   onNavigate: (page: Page) => void;
   onBack: () => void;
@@ -14,25 +17,25 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
       id: 's1',
       name: 'Магнит с видом гор',
       price: 150,
-      image: '/photo/magnitik2.png',
+      image: `/photo/magnitik2.png?${CACHE_BUST}`,
     },
     {
       id: 's2',
       name: 'Магнит с видом',
       price: 150,
-      image: '/photo/magnitik.png',
+      image: `/photo/magnitik.png?${CACHE_BUST}`,
     },
     {
       id: 's3',
       name: 'Часы на фанере',
       price: 1200,
-      image: '/photo/chasy.png',
+      image: `/photo/chasy.png?${CACHE_BUST}`,
     },
     {
       id: 's4',
       name: 'Текстильный платок',
       price: 600,
-      image: '/photo/platok.png',
+      image: `/photo/platok.png?${CACHE_BUST}`,
     },
   ];
 

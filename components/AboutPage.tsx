@@ -8,10 +8,12 @@ interface AboutPageProps {
   onBack: () => void;
 }
 
+// v=2 — обновлено 2026-06-07, сброс кэша браузера
+const CACHE_BUST = 'v=2';
 const photos = [
-  { url: '/onas/2.jpg', alt: 'Внешний вид гостевого дома' },
-  { url: '/onas/orig.jpeg', alt: 'Гостевой дом «Барские Хоромы»' },
-  { url: '/onas/i.webp', alt: 'Интерьер гостевого дома' },
+  { url: `/onas/2.jpg?${CACHE_BUST}`, alt: 'Внешний вид гостевого дома' },
+  { url: `/onas/orig.jpeg?${CACHE_BUST}`, alt: 'Гостевой дом «Барские Хоромы»' },
+  { url: `/onas/i.webp?${CACHE_BUST}`, alt: 'Интерьер гостевого дома' },
 ];
 
 export function AboutPage({ onBack }: AboutPageProps) {
