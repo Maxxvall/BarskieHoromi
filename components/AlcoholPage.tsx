@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from './Header';
-import { Lock, AlertCircle } from 'lucide-react';
+import { Lock, AlertCircle, X } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 // v=2 — обновлено 2026-06-07, сброс кэша браузера
@@ -14,6 +14,17 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
   const [promoCode, setPromoCode] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [error, setError] = useState('');
+  const [previewImage, setPreviewImage] = useState<{ src: string; alt: string } | null>(null);
+
+  // Закрытие по Escape
+  useEffect(() => {
+    if (!previewImage) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPreviewImage(null);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [previewImage]);
 
   // Secret code from build-time env variable, default "ХОРОМЫ"
   const SECRET_CODE = import.meta.env.VITE_SECRET_CODE || 'ХОРОМЫ';
@@ -129,7 +140,8 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
           {alcoholItems.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-lg border border-[#e9e9e9] overflow-hidden shadow-sm"
+              onClick={() => setPreviewImage({ src: item.image, alt: item.name })}
+              className="bg-white rounded-lg border border-[#e9e9e9] overflow-hidden shadow-sm cursor-pointer active:scale-[0.97] transition-transform"
             >
               <div className="aspect-square bg-[#f5f5f5] relative">
                 <ImageWithFallback
@@ -163,6 +175,29 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
           </p>
         </div>
       </div>
+
+      {/* Fullscreen Image Preview */}
+      {previewImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          style={{ animation: 'fadeIn 0.2s ease-out' }}
+          onClick={() => setPreviewImage(null)}
+        >
+          <button
+            onClick={() => setPreviewImage(null)}
+            className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white transition-colors z-10"
+            aria-label="Закрыть"
+          >
+            <X size={24} />
+          </button>
+          <img
+            src={previewImage.src}
+            alt={previewImage.alt}
+            className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 }
