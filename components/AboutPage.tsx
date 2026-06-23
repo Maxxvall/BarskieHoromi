@@ -131,7 +131,7 @@ export function AboutPage({ onBack }: AboutPageProps) {
 
         {/* Description */}
         <div className="mb-8">
-          <h2 className="text-[17px] font-semibold mb-4 text-[#000000]">Добро пожаловать! 🏡</h2>
+          <h2 className="text-[18px] font-light tracking-tight mb-4 text-[#000000]">Добро пожаловать! 🏡</h2>
           <div className="space-y-4 text-[16px] text-[#000000] leading-relaxed">
             <p>
               Гостевой дом «Барские Хоромы» — в самом центре Беломорска. На первом этаже — просторный зал с большим камином 🔥, 65" Smart TV (с подключением по Wi-Fi), обеденный стол и зерновая кофемашина. Уютная кухня полностью укомплектована, есть санузел и душевая с кедровой бочкой (за доп. плату). Коттедж стоит в тихом месте, есть собственная парковка и бесплатный Wi-Fi по всей территории. Магазины — в шаговой доступности.
@@ -166,33 +166,33 @@ export function AboutPage({ onBack }: AboutPageProps) {
 
         {/* Contact Information */}
         <div className="mb-6">
-          <h2 className="text-[17px] font-semibold mb-4 text-[#000000]">Контакты</h2>
+          <h2 className="text-[18px] font-light tracking-tight mb-4 text-[#000000]">Контакты</h2>
           <div className="space-y-3">
             {/* Telegram */}
             <a
               onClick={() => openMaxLink('https://max.ru/u/f9LHodD0cOJOIUAy2QVWz08FsV6DwdlAwoEzUBR6_SoDYBpWxI8kkp76YeQ')}
-              className="flex items-center gap-4 p-4 bg-[#0088cc]/10 rounded-lg border border-[#0088cc]/20 hover:bg-[#0088cc]/20 transition-all cursor-pointer"
+              className="flex items-center gap-4 p-4 bg-[#0088cc]/8 backdrop-blur-xl rounded-xl border border-white/40 shadow-elevation-1 hover:bg-[#0088cc]/12 transition-all duration-200 cursor-pointer [@supportsnot(backdrop-filter:blur(1px))]:bg-[#0088cc]/12"
             >
-              <div className="flex items-center justify-center w-12 h-12 bg-[#0088cc] rounded-full text-white">
+              <div className="flex items-center justify-center w-12 h-12 bg-[#0088cc] rounded-xl text-white shadow-elevation-2">
                 <Send size={24} />
               </div>
               <div className="flex-1">
                 <p className="text-[14px] text-[#666666] mb-1">MAX</p>
-                <p className="text-[16px] font-semibold text-[#0088cc]">Сергей</p>
+                <p className="text-[16px] font-medium text-[#0088cc]">Сергей</p>
               </div>
             </a>
 
             {/* Phone */}
             <a
               href="tel:+79212265444"
-              className="flex items-center gap-4 p-4 bg-[#52a547]/10 rounded-lg border border-[#52a547]/20 hover:bg-[#52a547]/20 transition-all"
+              className="flex items-center gap-4 p-4 bg-[#52a547]/8 backdrop-blur-xl rounded-xl border border-white/40 shadow-elevation-1 hover:bg-[#52a547]/12 transition-all duration-200 [@supportsnot(backdrop-filter:blur(1px))]:bg-[#52a547]/12"
             >
-              <div className="flex items-center justify-center w-12 h-12 bg-[#52a547] rounded-full text-white">
+              <div className="flex items-center justify-center w-12 h-12 bg-[#52a547] rounded-xl text-white shadow-elevation-2">
                 <Phone size={24} />
               </div>
               <div className="flex-1">
                 <p className="text-[14px] text-[#666666] mb-1">Телефон</p>
-                <p className="text-[16px] font-semibold text-[#52a547]">+7 (921) 226-54-44</p>
+                <p className="text-[16px] font-medium text-[#52a547]">+7 (921) 226-54-44</p>
               </div>
             </a>
           </div>

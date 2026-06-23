@@ -7,7 +7,7 @@ interface HeaderProps {
 
 export function Header({ title, onBack }: HeaderProps) {
   return (
-    <div className="sticky top-0 z-50 bg-white border-b border-[#e9e9e9]">
+    <div className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/40 shadow-elevation-1 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90">
       <div className="flex items-center h-14 px-4">
         {onBack && (
           <button
@@ -18,7 +18,7 @@ export function Header({ title, onBack }: HeaderProps) {
             <ArrowLeft size={24} color="#0088cc" />
           </button>
         )}
-        <h1 className="text-[20px] font-semibold text-[#000000]">{title}</h1>
+        <h1 className="text-[20px] font-light tracking-tight text-[#000000]">{title}</h1>
       </div>
     </div>
   );

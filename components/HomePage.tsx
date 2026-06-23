@@ -13,8 +13,8 @@ export function HomePage({ onNavigate }: HomePageProps) {
     <div className="flex flex-col min-h-screen bg-white">
       {/* Header */}
       <div className="bg-[#0088cc] text-white px-6 py-8">
-        <h1 className="text-[20px] font-semibold mb-2">Гостевой дом</h1>
-        <p className="text-[14px] opacity-90">Добро пожаловать!</p>
+        <h1 className="text-[22px] font-light tracking-tight mb-2">Гостевой дом</h1>
+        <p className="text-[14px] opacity-80 font-light">Добро пожаловать!</p>
       </div>
 
       {/* Main Navigation */}
@@ -53,8 +53,8 @@ export function HomePage({ onNavigate }: HomePageProps) {
       </div>
 
       {/* Important Notice */}
-      <div className="px-4 py-4 bg-yellow-50 border-t border-yellow-200">
-        <h3 className="text-[16px] font-semibold text-yellow-800 mb-2">Обязательно к соблюдению:</h3>
+      <div className="px-4 py-4 bg-[#faa61a]/8 backdrop-blur-xl border-t border-[#faa61a]/20">
+        <h3 className="text-[16px] font-medium text-yellow-800 mb-2">Обязательно к соблюдению:</h3>
         <ul className="text-[14px] text-yellow-700 space-y-1">
           <li>• С животными запрещено</li>
           <li>• Курить на территории гостевого дома запрещено</li>
@@ -63,12 +63,12 @@ export function HomePage({ onNavigate }: HomePageProps) {
       </div>
 
       {/* Contact Footer */}
-      <div className="px-6 py-4 bg-[#f5f5f5] border-t border-[#e9e9e9]">
+      <div className="px-6 py-4 bg-[#f5f5f5]/80 backdrop-blur-xl border-t border-white/40">
         <p className="text-[14px] text-[#666666] mb-2">Связаться с нами:</p>
         <div className="flex flex-col gap-1">
           <a
             onClick={() => openMaxLink('https://max.ru/u/f9LHodD0cOJOIUAy2QVWz08FsV6DwdlAwoEzUBR6_SoDYBpWxI8kkp76YeQ')}
-            className="text-[16px] text-[#0088cc] cursor-pointer flex items-center gap-2"
+            className="text-[16px] text-[#0088cc] cursor-pointer flex items-center gap-2 font-medium"
           >
             <Send size={16} />
             Сергей
@@ -94,17 +94,17 @@ interface NavigationButtonProps {
 function NavigationButton({ icon, title, description, onClick, delay }: NavigationButtonProps) {
   return (
     <Card
-      className="cursor-pointer hover:border-[#0088cc] transition-all duration-200 hover:shadow-md opacity-0 animate-fade-in-up"
+      className="cursor-pointer hover:border-[#0088cc]/60 transition-all duration-200 hover:shadow-elevation-2 opacity-0 animate-fade-in-up"
       onClick={onClick}
       style={{ animationDelay: `${delay}s` }}
     >
       {/* Используем flex для выравнивания иконки и текстов в одну строку */}
       <CardHeader className="flex items-center gap-4 p-4">
-        <div className="flex items-center justify-center w-16 h-16 bg-[#0088cc]/10 rounded-lg text-[#0088cc] shrink-0">
+        <div className="flex items-center justify-center w-16 h-16 bg-[#0088cc]/8 rounded-xl text-[#0088cc] shrink-0">
           {icon}
         </div>
         <div className="flex-1">
-          <CardTitle className="text-[16px] font-semibold mb-1">{title}</CardTitle>
+          <CardTitle className="text-[16px] font-medium mb-1">{title}</CardTitle>
           <CardDescription className="text-[14px]">{description}</CardDescription>
         </div>
       </CardHeader>

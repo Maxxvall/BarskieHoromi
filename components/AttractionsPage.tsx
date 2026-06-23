@@ -47,15 +47,15 @@ export function AttractionsPage({ onBack }: AttractionsPageProps) {
       <div className="px-4 py-6">
         {/* Attractions List */}
         <div className="mb-8">
-          <h2 className="text-[17px] font-semibold mb-4 text-[#000000]">Места для посещения</h2>
+          <h2 className="text-[18px] font-light tracking-tight mb-4 text-[#000000]">Места для посещения</h2>
           <div className="space-y-3">
             {attractions.map((attraction, index) => (
-              <div key={index} className="flex gap-3 p-4 bg-[#f5f5f5] rounded-lg">
-                <div className="flex items-center justify-center w-10 h-10 bg-[#0088cc]/10 rounded-lg text-[#0088cc] flex-shrink-0">
+              <div key={index} className="flex gap-3 p-4 bg-white/60 backdrop-blur-xl rounded-xl border border-white/40 shadow-elevation-1 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90">
+                <div className="flex items-center justify-center w-10 h-10 bg-[#0088cc]/8 rounded-xl text-[#0088cc] flex-shrink-0">
                   {attraction.icon}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-[16px] font-semibold mb-1 text-[#000000]">
+                  <h3 className="text-[16px] font-medium mb-1 text-[#000000]">
                     {attraction.name}
                   </h3>
                   <p className="text-[14px] text-[#666666]">{attraction.description}</p>
@@ -77,16 +77,16 @@ export function AttractionsPage({ onBack }: AttractionsPageProps) {
 
         {/* Emergency Contacts */}
         <div>
-          <h2 className="text-[17px] font-semibold mb-4 text-[#000000]">Экстренные контакты</h2>
+          <h2 className="text-[18px] font-light tracking-tight mb-4 text-[#000000]">Экстренные контакты</h2>
           <div className="space-y-2">
             {emergencyContacts.map((contact, index) => (
               <a
                 key={index}
                 href={`tel:${contact.phone}`}
-                className="flex items-center justify-between p-4 bg-[#f5f5f5] rounded-lg hover:bg-[#e9e9e9] transition-colors"
+                className="flex items-center justify-between p-4 bg-white/60 backdrop-blur-xl rounded-xl border border-white/40 shadow-elevation-1 hover:bg-white/80 transition-all duration-200 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-10 h-10 bg-[#e6406c]/10 rounded-lg text-[#e6406c]">
+                  <div className="flex items-center justify-center w-10 h-10 bg-[#e6406c]/8 rounded-xl text-[#e6406c]">
                     {contact.icon}
                   </div>
                   <span className="text-[16px] text-[#000000]">{contact.name}</span>

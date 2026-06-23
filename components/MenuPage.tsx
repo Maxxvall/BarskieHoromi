@@ -129,8 +129,8 @@ export function MenuPage({ onBack }: MenuPageProps) {
               type="button"
               aria-pressed={mealType === 'breakfast'}
               onClick={() => setMealType('breakfast')}
-              className={`rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${
-                mealType === 'breakfast' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'
+              className={`rounded-xl py-2 px-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:scale-[0.97] ${
+                mealType === 'breakfast' ? 'bg-[#0088cc] text-white shadow-elevation-2' : 'bg-white/60 backdrop-blur-sm text-[#666666] border border-white/40 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90'
               }`}
             >
               Завтрак
@@ -139,8 +139,8 @@ export function MenuPage({ onBack }: MenuPageProps) {
               type="button"
               aria-pressed={mealType === 'dinner'}
               onClick={() => setMealType('dinner')}
-              className={`rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${
-                mealType === 'dinner' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'
+              className={`rounded-xl py-2 px-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:scale-[0.97] ${
+                mealType === 'dinner' ? 'bg-[#0088cc] text-white shadow-elevation-2' : 'bg-white/60 backdrop-blur-sm text-[#666666] border border-white/40 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90'
               }`}
             >
               Ужин
@@ -159,8 +159,8 @@ export function MenuPage({ onBack }: MenuPageProps) {
               type="button"
               aria-pressed={orderDate === 'tomorrow'}
               onClick={() => setOrderDate('tomorrow')}
-              className={`flex-1 rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${
-                orderDate === 'tomorrow' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'
+              className={`flex-1 rounded-xl py-2 px-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:scale-[0.97] ${
+                orderDate === 'tomorrow' ? 'bg-[#0088cc] text-white shadow-elevation-2' : 'bg-white/60 backdrop-blur-sm text-[#666666] border border-white/40 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90'
               }`}
             >
               Завтра
@@ -169,8 +169,8 @@ export function MenuPage({ onBack }: MenuPageProps) {
               type="button"
               aria-pressed={orderDate === 'dayAfter'}
               onClick={() => setOrderDate('dayAfter')}
-              className={`flex-1 rounded-md py-2 px-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:opacity-90 ${
-                orderDate === 'dayAfter' ? 'bg-[#0088cc] text-white' : 'bg-[#f5f5f5] text-[#666666]'
+              className={`flex-1 rounded-xl py-2 px-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0088cc]/30 active:scale-[0.97] ${
+                orderDate === 'dayAfter' ? 'bg-[#0088cc] text-white shadow-elevation-2' : 'bg-white/60 backdrop-blur-sm text-[#666666] border border-white/40 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90'
               }`}
             >
               Послезавтра
@@ -184,16 +184,16 @@ export function MenuPage({ onBack }: MenuPageProps) {
             const quantity = getItemQuantity(item.id);
             return (
               <div key={item.id}>
-                <div className="flex items-center justify-between p-4 bg-[#f5f5f5] rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-white/60 backdrop-blur-xl rounded-xl border border-white/40 shadow-elevation-1 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90">
                   <div className="flex-1">
-                    <h3 className="text-[16px] font-semibold mb-1 text-[#000000]">{item.name}</h3>
+                    <h3 className="text-[16px] font-medium mb-1 text-[#000000]">{item.name}</h3>
                     <p className="text-[16px] text-[#0088cc] font-semibold">{item.price} ₽</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => removeFromCart(item.id)}
                       disabled={quantity === 0}
-                      className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-[#e9e9e9] text-[#666666] hover:border-[#0088cc] hover:text-[#0088cc] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/80 backdrop-blur-sm border border-white/60 text-[#666666] hover:border-[#0088cc]/60 hover:text-[#0088cc] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 [@supportsnot(backdrop-filter:blur(1px))]:bg-white"
                       aria-label="Уменьшить количество"
                     >
                       <Minus size={16} />
@@ -201,7 +201,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
                     <span className="w-6 text-center text-[16px] font-semibold">{quantity}</span>
                     <button
                       onClick={() => addToCart(item)}
-                      className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#0088cc] text-white hover:bg-[#0077b3] transition-all"
+                      className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#0088cc] text-white hover:bg-[#0077b3] shadow-elevation-2 transition-all duration-200 active:scale-95"
                       aria-label="Увеличить количество"
                     >
                       <Plus size={16} />
@@ -217,12 +217,12 @@ export function MenuPage({ onBack }: MenuPageProps) {
 
       {/* Order Summary (Fixed Bottom) */}
       {cart.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#e9e9e9] shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 bg-white/70 backdrop-blur-xl border-t border-white/40 shadow-elevation-3">
           <div className="mx-auto max-w-[480px] px-4 py-4">
             <div className="mb-3">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-[14px] text-[#666666]">Итого:</span>
-                <span className="text-[20px] font-semibold text-[#000000]">{totalPrice} ₽</span>
+                <span className="text-[20px] font-light tracking-tight text-[#000000]">{totalPrice} ₽</span>
               </div>
               <p className="text-[14px] text-[#666666]">{cart.reduce((sum, item) => sum + item.quantity, 0)} позиций</p>
             </div>

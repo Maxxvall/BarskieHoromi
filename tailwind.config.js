@@ -60,8 +60,13 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      boxShadow: {
+        'elevation-1': 'var(--elevation-1)',
+        'elevation-2': 'var(--elevation-2)',
+        'elevation-3': 'var(--elevation-3)',
+      },
       fontFamily: {
-        sans: ["-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+        sans: ['"Inter"', "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
       },
     },
   },

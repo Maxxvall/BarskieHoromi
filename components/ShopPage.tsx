@@ -58,13 +58,13 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
       <div className="px-4 py-6">
         {/* Alcohol Promo Section (always visible) */}
         <div className="mb-8">
-          <div className="bg-gradient-to-r from-[#0088cc]/10 to-[#52a547]/10 rounded-lg p-6 border border-[#0088cc]/20">
+          <div className="bg-gradient-to-r from-[#0088cc]/8 to-[#52a547]/8 backdrop-blur-xl rounded-xl p-6 border border-white/40 shadow-elevation-1">
             <div className="flex items-start gap-4 mb-4">
-              <div className="w-12 h-12 bg-[#0088cc]/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 bg-[#0088cc]/12 rounded-xl flex items-center justify-center flex-shrink-0">
                 <Lock size={24} className="text-[#0088cc]" />
               </div>
               <div className="flex-1">
-                <h3 className="text-[16px] font-semibold mb-2 text-[#000000]">
+                <h3 className="text-[16px] font-medium mb-2 text-[#000000]">
                   Секретный раздел
                 </h3>
                 {/* Description removed as requested */}
@@ -81,13 +81,13 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
 
         {/* Souvenirs Section */}
         <div className="mb-8">
-          <h2 className="text-[17px] font-semibold mb-4 text-[#000000]">Сувениры</h2>
+          <h2 className="text-[18px] font-light tracking-tight mb-4 text-[#000000]">Сувениры</h2>
           <div className="grid grid-cols-2 gap-3">
             {souvenirs.map((souvenir) => (
               <div
                 key={souvenir.id}
                 onClick={() => setPreviewImage({ src: souvenir.image, alt: souvenir.name })}
-                className="bg-white rounded-lg border border-[#e9e9e9] overflow-hidden shadow-sm cursor-pointer active:scale-[0.97] transition-transform"
+                className="bg-white/60 backdrop-blur-xl rounded-xl border border-white/40 overflow-hidden shadow-elevation-1 cursor-pointer active:scale-[0.97] transition-all duration-200 hover:shadow-elevation-2 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90"
               >
                 <div className="aspect-square bg-[#f5f5f5] relative">
                   <ImageWithFallback
@@ -97,7 +97,7 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
                   />
                 </div>
                 <div className="p-3">
-                  <h3 className="text-[14px] font-semibold mb-2 text-[#000000] line-clamp-2">
+                  <h3 className="text-[14px] font-medium mb-2 text-[#000000] line-clamp-2">
                     {souvenir.name}
                   </h3>
                   <p className="text-[16px] text-[#0088cc] font-semibold">{souvenir.price} ₽</p>
@@ -108,7 +108,7 @@ export function ShopPage({ onNavigate, onBack }: ShopPageProps) {
         </div>
 
         {/* Info Text */}
-        <div className="mt-6 p-4 bg-[#f5f5f5] rounded-lg">
+        <div className="mt-6 p-4 bg-white/60 backdrop-blur-xl rounded-xl border border-white/40 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90">
           <p className="text-[14px] text-[#666666] text-center">
             Все товары можно приобрести обратившись к хозяину дома
           </p>

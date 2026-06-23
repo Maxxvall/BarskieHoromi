@@ -39,7 +39,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
     },
     {
       id: 'a2',
-      name: 'самогон в разлив',
+      name: 'Cамогон в разлив',
       price: 350,
       volume: '500 мл',
       image: `/photo/alco/vishnya.png?${CACHE_BUST}`,
@@ -81,13 +81,13 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
           <div className="max-w-md mx-auto">
             {/* Lock Icon */}
             <div className="flex justify-center mb-6">
-              <div className="w-20 h-20 bg-[#0088cc]/10 rounded-full flex items-center justify-center">
+              <div className="w-20 h-20 bg-[#0088cc]/8 rounded-2xl flex items-center justify-center">
                 <Lock size={40} className="text-[#0088cc]" />
               </div>
             </div>
 
             {/* Title */}
-            <h2 className="text-[20px] font-semibold text-center mb-2 text-[#000000]">
+            <h2 className="text-[20px] font-light tracking-tight text-center mb-2 text-[#000000]">
               Введите промокод
             </h2>
 
@@ -99,12 +99,12 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
                   placeholder="Введите промокод"
-                  className="w-full h-12 px-4 border border-[#e9e9e9] rounded-lg text-[16px] focus:outline-none focus:border-[#0088cc] focus:ring-2 focus:ring-[#0088cc]/20 transition-all"
+                  className="w-full h-12 px-4 bg-white/60 backdrop-blur-xl border border-white/40 rounded-xl text-[16px] focus:outline-none focus:border-[#0088cc]/60 focus:ring-2 focus:ring-[#0088cc]/20 transition-all duration-200 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90"
                 />
               </div>
 
               {error && (
-                <div className="flex items-start gap-2 p-3 bg-[#e6406c]/10 border border-[#e6406c]/20 rounded-lg">
+                <div className="flex items-start gap-2 p-3 bg-[#e6406c]/8 backdrop-blur-xl border border-[#e6406c]/20 rounded-xl">
                   <AlertCircle size={20} className="text-[#e6406c] flex-shrink-0 mt-0.5" />
                   <p className="text-[14px] text-[#e6406c]">{error}</p>
                 </div>
@@ -131,7 +131,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
 
       <div className="px-4 py-6">
         {/* Success Message */}
-        <div className="mb-6 p-4 bg-[#52a547]/10 border border-[#52a547]/20 rounded-lg">
+        <div className="mb-6 p-4 bg-[#52a547]/8 backdrop-blur-xl border border-[#52a547]/20 rounded-xl">
           <p className="text-[14px] text-[#52a547] text-center font-semibold">Доступ разрешен</p>
         </div>
 
@@ -141,7 +141,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
             <div
               key={item.id}
               onClick={() => setPreviewImage({ src: item.image, alt: item.name })}
-              className="bg-white rounded-lg border border-[#e9e9e9] overflow-hidden shadow-sm cursor-pointer active:scale-[0.97] transition-transform"
+              className="bg-white/60 backdrop-blur-xl rounded-xl border border-white/40 overflow-hidden shadow-elevation-1 cursor-pointer active:scale-[0.97] transition-all duration-200 hover:shadow-elevation-2 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90"
             >
               <div className="aspect-square bg-[#f5f5f5] relative">
                 <ImageWithFallback
@@ -151,7 +151,7 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
                 />
               </div>
               <div className="p-3">
-                <h3 className="text-[14px] font-semibold mb-1 text-[#000000] line-clamp-2">
+                <h3 className="text-[14px] font-medium mb-1 text-[#000000] line-clamp-2">
                   {item.name}
                 </h3>
                 <p className="text-[12px] text-[#666666] mb-2">{item.volume}</p>
@@ -162,14 +162,14 @@ export function AlcoholPage({ onBack }: AlcoholPageProps) {
         </div>
 
         {/* Warning */}
-        <div className="mt-6 p-4 bg-[#faa61a]/10 border border-[#faa61a]/20 rounded-lg">
+        <div className="mt-6 p-4 bg-[#faa61a]/8 backdrop-blur-xl border border-[#faa61a]/20 rounded-xl">
           <p className="text-[14px] text-[#666666] text-center">
             Продажа алкогольной продукции лицам младше 18 лет запрещена
           </p>
         </div>
 
         {/* Info Text */}
-        <div className="mt-4 p-4 bg-[#f5f5f5] rounded-lg">
+        <div className="mt-4 p-4 bg-white/60 backdrop-blur-xl rounded-xl border border-white/40 [@supportsnot(backdrop-filter:blur(1px))]:bg-white/90">
           <p className="text-[14px] text-[#666666] text-center">
             Все товары можно приобрести обратившись к хозяину дома
           </p>
