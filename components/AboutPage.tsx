@@ -65,16 +65,14 @@ export function AboutPage({ onBack }: AboutPageProps) {
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
-            {/* Only render current + adjacent images for lazy loading */}
+            {/* All slides always mounted for smooth transitions */}
             <div className="w-full h-full">
               {photos.map((photo, index) => {
-                // Only render current and adjacent photos to avoid unnecessary network requests
-                if (Math.abs(index - currentPhoto) > 1) return null;
                 const offset = index - currentPhoto;
                 return (
                   <div
                     key={index}
-                    className="absolute inset-0 transition-transform duration-300 ease-out"
+                    className="absolute inset-0 transition-transform duration-300 ease-out will-change-transform"
                     style={{
                       transform: `translateX(calc(${offset * 100}% + ${isSwiping && index === currentPhoto ? touchDelta : 0}px))`,
                     }}
