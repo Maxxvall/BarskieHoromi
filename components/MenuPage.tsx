@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Header } from './Header';
 import { Plus, Minus, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
-import { openMaxWrite } from '../lib/telegram';
+import { openMaxLink } from '../lib/telegram';
 // Tabs (Radix) replaced with simple buttons in this page to ensure consistent styling across builds
 // import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { Button } from './ui/button';
@@ -102,16 +102,16 @@ export function MenuPage({ onBack }: MenuPageProps) {
     const messageText = `**Новый заказ!**\n\n**${mealText}** на **${dateText}**\n\n${itemsList}\n\n**Итого: ${totalPrice} ₽**`;
 
     try {
-      openMaxWrite('u/f9LHodD0cOJOIUAy2QVWz08FsV6DwdlAwoEzUBR6_SoDYBpWxI8kkp76YeQ', messageText);
-      toast.success('Открыт чат MAX для подтверждения заказа', {
+      await navigator.clipboard.writeText(messageText);
+      openMaxLink('https://max.ru/u/f9LHodD0cOJOIUAy2QVWz08FsV6DwdlAwoEzUBR6_SoDYBpWxI8kkp76YeQ');
+      toast.success('Текст заказа скопирован! Вставьте в чат с Сергеем', {
         description: `${mealText} на ${dateText}, ${totalPrice} ₽`,
-        duration: 4000,
+        duration: 5000,
       });
       setCart([]);
-      return;
     } catch (error) {
-      console.error('Failed to open MAX link:', error);
-      toast.error('Не удалось открыть MAX. Сообщите о заказе хозяевам лично.', {
+      console.error('Failed to copy order text:', error);
+      toast.error('Не удалось скопировать текст. Скопируйте заказ вручную.', {
         duration: 5000,
       });
     }
