@@ -102,7 +102,7 @@ export function MenuPage({ onBack }: MenuPageProps) {
     const messageText = `**Новый заказ!**\n\n**${mealText}** на **${dateText}**\n\n${itemsList}\n\n**Итого: ${totalPrice} ₽**`;
 
     try {
-      openMaxWrite(282124260, messageText);
+      openMaxWrite('u/f9LHodD0cOJOIUAy2QVWz08FsV6DwdlAwoEzUBR6_SoDYBpWxI8kkp76YeQ', messageText);
       toast.success('Открыт чат MAX для подтверждения заказа', {
         description: `${mealText} на ${dateText}, ${totalPrice} ₽`,
         duration: 4000,
