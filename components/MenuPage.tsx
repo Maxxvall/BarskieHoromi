@@ -99,7 +99,11 @@ export function MenuPage({ onBack }: MenuPageProps) {
       .map((item) => `- ${item.name} x${item.quantity} — ${item.price * item.quantity} ₽`)
       .join('\n');
 
-    const messageText = `**Новый заказ!**\n\n**${mealText}** на **${dateText}**\n\n${itemsList}\n\n**Итого: ${totalPrice} ₽**`;
+    const mealEmoji = mealType === 'breakfast' ? '🍳' : '🍽';
+    const dateEmoji = orderDate === 'tomorrow' ? '📅' : '📅';
+    const dateLabel = orderDate === 'tomorrow' ? 'Завтра' : 'Послезавтра';
+
+    const messageText = `🆕 Новый заказ!\n\n${mealEmoji} ${mealText}\n${dateEmoji} ${dateLabel}\n\n${itemsList}\n\n💰 Итого: ${totalPrice} ₽`;
 
     try {
       await navigator.clipboard.writeText(messageText);
